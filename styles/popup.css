@@ -1,0 +1,99 @@
+
+.movieList::after {
+    content: "";
+    flex: auto;
+}
+#popup {
+  background-color: rgb(9, 21, 66);
+  width: 100%;
+  height: 100%;
+  color: white;
+  top: 0;
+  will-change: 'transform';
+  transition: transform 300ms cubic-bezier(0, 0, 0.2, 1), opacity 400ms ease;
+}
+.popup-open {
+  position: fixed;
+  opacity: 1.0;
+  -webkit-transform: translateX(0%);
+  transform: translateX(0%);
+}
+
+.popup-close {
+  position: fixed;
+  opacity: 1.0;
+  -webkit-transform: translateX(-100%);
+  transform: translateX(-100%);
+}
+
+.popup-header {
+  display: flex;
+  padding: 18px;
+}
+
+.popup-header-right {
+  margin-left: 15px;
+}
+.popup-header-right-title {
+  font-size: 19px;
+}
+.popup-header-right-director {
+  font-size: 12px;
+}
+
+.popup-days{
+  display: flex;
+  padding-inline-start: unset;
+  overflow-x: scroll;
+  margin-block-start: 1em;
+  margin-block-end: 0em;
+}
+
+.popup-days-day {
+  list-style-type: none;
+  margin-right: 25px;
+  margin: 0px 1px;
+  min-width: 33%;
+  text-align: center;
+  background: #182065;
+  font-family: arial,sans-serif;
+  font-weight: lighter;
+  padding: 8px 0 7px 0;
+}
+.popup-elements {
+  overflow-y: scroll;
+}
+.popup-elements::after {
+  height: 21px;
+  content: "";
+  display: flex;
+}
+.popup-element {
+  padding-left: 18px;
+}
+
+.popup-element-title {
+  font-size: 19px;
+  width: 289px;
+  margin-left: 0px;
+  margin-top: 21px;
+  margin-bottom: 2px;
+}
+
+.popup-element-bubbles {
+  width: 226px;
+}
+
+.popup-element-bubble {
+  border: 1pt solid #5c5c71;
+  border-radius: 11px;
+  padding: 0 19px;
+  margin: 4px 2px;
+  display: -webkit-inline-box;
+}
+
+.selected {
+  display: inline-block;
+  border-bottom: solid #d0003b 2px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+}

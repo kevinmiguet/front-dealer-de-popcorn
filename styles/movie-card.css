@@ -1,0 +1,25 @@
+.movie-card {
+    display: flex;
+    flex-direction: column;
+    max-width: 103px; 
+    /*  200 for bigger screen */
+    margin-top: 8px;
+}
+
+.movie-poster {
+    /* width: 200px;
+    height: 283px; */
+    width: 103px;
+    height: 146px;
+    border-radius: 7px;
+}
+
+.movie-director {
+    font-size: 13px;
+    margin-left: 3px;
+}
+.movie-title {
+    font-size: 16px;
+    margin-top: 6.3px;
+    margin-left: 3px;
+}
