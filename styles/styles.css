@@ -1,9 +1,3 @@
-
-.movieList::after {
-    content: "";
-    flex: auto;
-}
-
 body {
         /* background: rgba(21,58,114,1); */
         background: -moz-linear-gradient(24deg, #2c0154 -114%, rgb(11, 14, 19) 6%, #2c0154 100%);
@@ -35,13 +29,36 @@ body {
     justify-content: space-evenly;
 
 }
-.movieCluster-content::after {
-    content: "";
-    flex: auto;
-}
+
 .movieCluster-title{
     font-size: 20px;
     margin-left: 9px;
     margin-top: 22px;
     margin-bottom: 4px;
+}
+
+#search-bar {
+    border-radius: 12px;
+    border-style: none;
+    padding: 3px 17px;
+}
+.popup-days::-webkit
+::-webkit-scrollbar {
+    width: 15px;
+    height: 15px;
+}
+
+::-webkit-scrollbar-track-piece:vertical  {
+    background-color: #C2D2E4;
+}
+
+::-webkit-scrollbar-thumb:vertical {
+    height: 30px;
+    background-color: #0A4C95;
+}
+
+::-webkit-scrollbar-thumb:horizontal {
+    width: 4px;
+    height: 4px;
+    background-color: #0A4C95;
 }

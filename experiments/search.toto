@@ -1,0 +1,52 @@
+const tags = [
+    'japonais',
+    'français'
+]
+
+// écrire des test unitaires pour cette fonction
+// et trafiquer dans tous les sens le code pour obtenir un truc cool
+function getSearchResult(string) {
+    return tags.filter(tag => areStringSimilar(string, tag))
+}
+function boringify(string) {
+    return string.toLowerCase()
+    // remove accents, spaces, tirets, 
+    // remove double consons and voyels
+}
+function areStringSimilar(_search, _tag) {
+    const search = boringify(_search), tag = boringify(_tag);
+    if (!search || search === '') {
+        return false
+    }
+    if (search === tag) {
+        return true;
+    }
+    // if search is 4 chars longer than tag, discard the tag
+    if (search.length - tag.length >= 4) {
+        return false;
+    }
+    return distanceEditionIsLow(search, tag);
+}
+
+
+function distanceEditionIsLow(search, tag) {
+    // for words of 3 letters and less
+    let distanceMax = search.length <= 3 ? 1 : 3;
+    return distanceEdition(search, tag) < distanceMax;
+}
+
+function distanceEdition(search, tag) {
+    const searchSplit = search.split('');
+    const tagSplit = tag.split('');
+    let distance = 0;
+    searchSplit.forEach((letter, index) => {
+        if (letter !== tagSplit[index]) {
+            distance ++;
+        }
+    })
+    return distance;
+}
+
+
+const searchBar = document.getElementById('search-bar');
+searchBar.onkeyup = () => console.log(getSearchResult(searchBar.value));

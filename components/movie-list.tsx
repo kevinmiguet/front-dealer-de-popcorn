@@ -7,9 +7,10 @@ export class MovieList extends React.Component<{ clusters: MovieCluster[], onCli
     render() {
         return (
             <div className='movieList'>
-                {this.props.clusters.map(cluster => (
-                    <div className='movieCluster'>
-                        {cluster.title!== '' ? <div className='movieCluster-title'>{cluster.title}</div>: ''}
+                {this.props.clusters.map(
+                    (cluster, clusterIndex) => (
+                    <div key={clusterIndex} className='movieCluster'>
+                        {cluster.title !== '' ? <div className='movieCluster-title'>{cluster.title}</div>: ''}
                         <div className='movieCluster-content'>
                             {cluster.movieIds.map(movieId => (
                                 <MovieCard key={movieId} movie={movies[movieId]} onClick={() => this.props.onClick(movies[movieId])}></MovieCard>
@@ -17,7 +18,7 @@ export class MovieList extends React.Component<{ clusters: MovieCluster[], onCli
                         </div>
                     </div>
                 ))}
-            </div>
+            </div>  
         );
     }
 }

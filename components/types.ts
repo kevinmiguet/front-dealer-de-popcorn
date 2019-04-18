@@ -42,7 +42,7 @@ export interface Database {
 export interface MovieCluster {
     // type: 'carousel' | 'classic';
     movieIds: string[];
-    title: string;
+    title?: string;
 }
 export type ClusterTitle = 'recent' | 'retro' | 'old'
 export type Clusters = {

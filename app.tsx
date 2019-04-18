@@ -4,6 +4,7 @@ import { Movie, MovieCluster, Schedule, Cinema, Clusters, ClusterTitle } from '.
 import { MovieList } from './components/movie-list';
 import { Popup } from './components/popup';
 import { NavigationBar } from './components/navigation-bar';
+import { SearchBar } from './components/search-bar';
 
 export const movies: { [id: string]: Movie } = require('./export/movies.json');
 export const moviesClusters: Clusters = require('./export/clusters.json');
@@ -42,9 +43,18 @@ class App extends React.Component<{ greeting: string }, AppState> {
       isOpen: false,
     })
   }
+  setClusters = (clusters: MovieCluster[]) => {
+    this.setState({
+      moviesCluster: clusters
+    });
+  }
+  setBackCurrentMovieCluster = () => {
+    this.setMoviesCluster(this.state.buttonSelected);
+  }
   render() {
     return (
       <div>
+        <SearchBar setClusters={this.setClusters} setDefaultCluster={this.setBackCurrentMovieCluster}></SearchBar>
         <Popup movie={this.state.movie} isOpen={this.state.isOpen} daySelected={this.state.daySelected} setDayFn={this.setDaySelected}/>
         <MovieList clusters={this.state.moviesCluster} onClick={this.setStateMovie}/>
         <NavigationBar buttonSelected={this.state.buttonSelected} setMoviesClusterFunction={this.setMoviesCluster}/>
