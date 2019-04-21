@@ -1,8 +1,4 @@
 
-.movieList::after {
-    content: "";
-    flex: auto;
-}
 #popup {
   background-color: rgb(9, 21, 66);
   width: 100%;

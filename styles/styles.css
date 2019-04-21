@@ -24,9 +24,10 @@ body {
     margin-bottom: 40px;
 }
 .movieCluster-content {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-evenly;
+    display: grid; /* 1 */
+  grid-template-columns: repeat(auto-fill, 103px); /* 2 */
+  grid-column-gap: 3px; /* 3 */
+  justify-content: space-evenly; /* 4 */
 
 }
 
