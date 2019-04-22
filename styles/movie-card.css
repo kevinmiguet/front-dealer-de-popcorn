@@ -4,8 +4,8 @@
     max-width: 103px; 
     /*  200 for bigger screen */
     margin-top: 8px;
+    z-index: 1;
 }
-
 
 .movie-poster {
     /* width: 200px;
@@ -16,11 +16,12 @@
 }
 
 .movie-director {
-    font-size: 13px;
+    font-size: 11px;
     margin-left: 3px;
+    color: #797a81;
 }
 .movie-title {
-    font-size: 16px;
+    font-size: 13px;
     margin-top: 6.3px;
     margin-left: 3px;
 }
