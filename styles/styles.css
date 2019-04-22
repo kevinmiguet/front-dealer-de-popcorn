@@ -1,17 +1,7 @@
 body {
-    margin: 0px;
-}
-
-#app {
-        /* background: rgba(21,58,114,1); */
-        background: -moz-linear-gradient(24deg, #2c0154 -114%, rgb(11, 14, 19) 6%, #2c0154 100%);
-        background: -webkit-gradient(left bottom, right top, color-stop(#2c0154 -114%), color-stop( rgb(11, 14, 19) 6%), color-stop(#2c0154 100%));
-        background: -webkit-linear-gradient(24deg, #2c0154 -114%, rgb(11, 14, 19) 6%, #2c0154 100%);
-        background: -o-linear-gradient(24deg, #2c0154 -114%, rgb(11, 14, 19) 6%, #2c0154 100%);
-        background: -ms-linear-gradient(24deg, #2c0154 -114%, rgb(11, 14, 19) 6%, #2c0154 100%);
-        background: linear-gradient(24deg, #12173d -114%, rgb(11, 14, 19) 6%, #171c56 100%);
-        /* background: #260048; */
-        height: 100%;
+        margin: 0px;
+        background: linear-gradient(24deg, rgb(11, 14, 19) 6vh, #171c56 112vh);
+        height: 100vh;    
         color: white;
         font-family: Lato,Helvetica,Arial,sans-serif;
         margin: 0;
