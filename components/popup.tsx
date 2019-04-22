@@ -22,7 +22,6 @@ const indexedScheduleIds: IndexedScheduleIds = scheduleIds.reduce((_indexedSched
 }, {});
 const days = ['', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche'];
 
-// @TODO: block scrolling when opening this
 export class Popup extends React.Component<{ movie: Movie, isOpen: boolean, daySelected: number, setDayFn: Function }, {popupContentHeight: number} > {
     constructor(props) {
         super(props);

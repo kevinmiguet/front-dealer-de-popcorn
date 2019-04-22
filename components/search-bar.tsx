@@ -15,7 +15,6 @@ export class SearchBar extends React.Component<{setClusters: Function, setDefaul
                     type='text'
                     placeholder='quel genre de film allez vous voir ?'
                     onKeyUp={() => this.search((document.getElementById('search-bar') as any).value)}
-                    // @TODO: find the best way to use input value in react
                 ></input>
 
             </div>
