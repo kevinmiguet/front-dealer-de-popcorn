@@ -1,4 +1,8 @@
 body {
+    margin: 0px;
+}
+
+#app {
         /* background: rgba(21,58,114,1); */
         background: -moz-linear-gradient(24deg, #2c0154 -114%, rgb(11, 14, 19) 6%, #2c0154 100%);
         background: -webkit-gradient(left bottom, right top, color-stop(#2c0154 -114%), color-stop( rgb(11, 14, 19) 6%), color-stop(#2c0154 100%));
