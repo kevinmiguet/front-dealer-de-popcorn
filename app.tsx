@@ -16,7 +16,7 @@ interface AppState {
   buttonSelected: ClusterTitle
 }
 
-class App extends React.Component<{ greeting: string }, AppState> {
+class App extends React.Component<{}, AppState> {
   state: AppState = {
     isOpen: false,
     movie: movies[Object.keys(movies)[0]],
@@ -64,6 +64,6 @@ class App extends React.Component<{ greeting: string }, AppState> {
 }
 
 ReactDOM.render(
-  <App greeting="Hello, world!" />,
+  <App/>,
   document.getElementById('app')
 );

@@ -30,7 +30,13 @@ export class Popup extends React.Component<{ movie: Movie, isOpen: boolean, dayS
         };
         this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
     }
-
+    componentWillReceiveProps(newProps){
+        if (newProps.isOpen) {
+            document.getElementsByTagName("body")[0].className = 'scrollBlocked';
+        } else {
+            document.getElementsByTagName("body")[0].removeAttribute('class');
+        }
+    }
     componentDidMount() {
         this.updateWindowDimensions();
         window.addEventListener('resize', this.updateWindowDimensions);
