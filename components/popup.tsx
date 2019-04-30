@@ -22,7 +22,7 @@ const indexedScheduleIds: IndexedScheduleIds = scheduleIds.reduce((_indexedSched
 }, {});
 const days = ['', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche'];
 
-export class Popup extends React.Component<{ movie: Movie, isOpen: boolean, daySelected: number, setDayFn: Function }, {popupContentHeight: number} > {
+export class Popup extends React.Component<{ movie: Movie, isOpen: boolean, daySelected: number }, {popupContentHeight: number} > {
     constructor(props) {
         super(props);
         this.state = { 
@@ -61,7 +61,7 @@ export class Popup extends React.Component<{ movie: Movie, isOpen: boolean, dayS
                             <div className='popup-header-right-director'> {this.props.movie.directors[0]}</div>
                         </div>
                     </div>
-                    <DayButtons daySelected={this.props.daySelected} setDayFn={this.props.setDayFn} />
+                    <DayButtons daySelected={this.props.daySelected} movieId={this.props.movie.id} />
                 </div>
                 <div className='popup-elements' style={popupElementsStyle}>
                     {indexedScheduleIds[this.props.movie.id].map(scheduleId => (
@@ -87,14 +87,14 @@ const Schedule: React.FunctionComponent<{ cineId: string, schedules: string[] }>
     ): null
 }
 
-const DayButtons: React.FunctionComponent<{ daySelected: number, setDayFn: Function }> = (props) => (
+const DayButtons: React.FunctionComponent<{ daySelected: number, movieId: string }> = (props) => (
     <ul className='popup-days'>
-        <li className={props.daySelected === 1 ? 'selected popup-days-day' : 'popup-days-day'} onClick={() => props.setDayFn(1)}>Lundi</li>
-        <li className={props.daySelected === 2 ? 'selected popup-days-day' : 'popup-days-day'} onClick={() => props.setDayFn(2)}>Mardi</li>
-        <li className={props.daySelected === 3 ? 'selected popup-days-day' : 'popup-days-day'} onClick={() => props.setDayFn(3)}>Mercredi</li>
-        <li className={props.daySelected === 4 ? 'selected popup-days-day' : 'popup-days-day'} onClick={() => props.setDayFn(4)}>Jeudi</li>
-        <li className={props.daySelected === 5 ? 'selected popup-days-day' : 'popup-days-day'} onClick={() => props.setDayFn(5)}>Vendredi</li>
-        <li className={props.daySelected === 6 ? 'selected popup-days-day' : 'popup-days-day'} onClick={() => props.setDayFn(6)}>Samedi</li>
-        <li className={props.daySelected === 7 ? 'selected popup-days-day' : 'popup-days-day'} onClick={() => props.setDayFn(7)}>Dimanche</li>
+        <a className={props.daySelected === 1 ? 'selected popup-days-day' : 'popup-days-day'} href={`#/movie/${props.movieId}/day/${1}`}>Lundi</a>
+        <a className={props.daySelected === 2 ? 'selected popup-days-day' : 'popup-days-day'} href={`#/movie/${props.movieId}/day/${2}`}>Mardi</a>
+        <a className={props.daySelected === 3 ? 'selected popup-days-day' : 'popup-days-day'} href={`#/movie/${props.movieId}/day/${3}`}>Mercredi</a>
+        <a className={props.daySelected === 4 ? 'selected popup-days-day' : 'popup-days-day'} href={`#/movie/${props.movieId}/day/${4}`}>Jeudi</a>
+        <a className={props.daySelected === 5 ? 'selected popup-days-day' : 'popup-days-day'} href={`#/movie/${props.movieId}/day/${5}`}>Vendredi</a>
+        <a className={props.daySelected === 6 ? 'selected popup-days-day' : 'popup-days-day'} href={`#/movie/${props.movieId}/day/${6}`}>Samedi</a>
+        <a className={props.daySelected === 7 ? 'selected popup-days-day' : 'popup-days-day'} href={`#/movie/${props.movieId}/day/${7}`}>Dimanche</a>
     </ul>
 )

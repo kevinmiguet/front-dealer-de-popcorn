@@ -44,7 +44,8 @@ export interface MovieCluster {
     movieIds: string[];
     title?: string;
 }
-export type ClusterTitle = 'recent' | 'retro' | 'old'
+export type ClusterTitle = 'recent' | 'retro' | 'old';
+export const ClusterTitles: ClusterTitle[] = ['old','recent', 'retro']
 export type Clusters = {
     [cluster in ClusterTitle]: MovieCluster[]
 }

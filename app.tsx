@@ -1,32 +1,79 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { Movie, MovieCluster, Schedule, Cinema, Clusters, ClusterTitle } from './components/types';
+import { Movie, MovieCluster, Schedule, Cinema, Clusters, ClusterTitle, ClusterTitles } from './components/types';
 import { MovieList } from './components/movie-list';
 import { Popup } from './components/popup';
 import { NavigationBar } from './components/navigation-bar';
 import { SearchBar } from './components/search-bar';
 
+function getStateFromHash(hash: string): AppState {
+  const args = hash.split('/');
+  let newState: AppState = {};
+  let i = 1; // first one is always #
+  newState.isOpen = false; // popup is closed by default
+  while (i < args.length) {
+    let arg = args[i];
+    let argValue = args[i+1]
+    
+    if (arg === 'movie') {
+      let movieId = argValue;
+      const isLegitId = Object.keys(movies).indexOf(movieId as any) > 0 ;
+      // if it's not a legit Id, just don't treat this argument
+      if (!isLegitId) {
+        i+=2;
+        continue;
+      } 
+    
+      newState.movieId = movieId;
+      newState.isOpen = true;
+      i+=2;
+      continue;
+    } 
+    
+    else if (arg === 'day') {
+      let daySelected = parseInt(argValue, 10);
+      const isLegitDay = daySelected > 0 && daySelected < 8;
+      newState.daySelected = isLegitDay ? daySelected: 1;
+      i+=2;
+      continue
+    }
+    
+    else if (arg === 'cluster'){
+      // set 'recent' if argValue is not a ClusterTitle
+      const isClusterTitle = ClusterTitles.indexOf(argValue as any) >= 0 ;
+      let clusterName: any = isClusterTitle ? argValue : 'recent';
+      newState.moviesCluster = moviesClusters[clusterName];
+      newState.buttonSelected = clusterName;
+      i+=2;
+      continue;
+    }
+    
+    i++;
+  }
+ 
+  return newState
+}
 export const movies: { [id: string]: Movie } = require('./export/movies.json');
 export const moviesClusters: Clusters = require('./export/clusters.json');
 interface AppState {
-  movie: Movie,
-  isOpen: boolean
-  moviesCluster: MovieCluster[],
-  daySelected: number;
-  buttonSelected: ClusterTitle
+  movieId?: string,
+  isOpen?: boolean
+  moviesCluster?: MovieCluster[],
+  daySelected?: number;
+  buttonSelected?: ClusterTitle
 }
 
 class App extends React.Component<{}, AppState> {
   state: AppState = {
     isOpen: false,
-    movie: movies[Object.keys(movies)[0]],
+    movieId: Object.keys(movies)[0],
     moviesCluster: moviesClusters.recent,
     daySelected: 1,
     buttonSelected: 'recent'
   };
-  setStateMovie = (movie: Movie) => {
+  setStateMovie = (movieId: string) => {
     this.setState({
-      movie,
+      movieId,
       isOpen: true,
       daySelected: 1,
     });
@@ -51,19 +98,30 @@ class App extends React.Component<{}, AppState> {
   setBackCurrentMovieCluster = () => {
     this.setMoviesCluster(this.state.buttonSelected);
   }
+  navigated = () => {
+    const newState = getStateFromHash(window.location.hash)
+    this.setState(newState);
+  }
+
+  componentWillMount() {
+    // Handle the initial route
+    this.navigated();
+    // Handle browser navigation events
+    window.addEventListener('hashchange', this.navigated, false);
+  }
   render() {
     return (
       <div>
         <SearchBar setClusters={this.setClusters} setDefaultCluster={this.setBackCurrentMovieCluster}></SearchBar>
-        <Popup movie={this.state.movie} isOpen={this.state.isOpen} daySelected={this.state.daySelected} setDayFn={this.setDaySelected}/>
-        <MovieList clusters={this.state.moviesCluster} onClick={this.setStateMovie}/>
-        <NavigationBar buttonSelected={this.state.buttonSelected} setMoviesClusterFunction={this.setMoviesCluster}/>
+        <Popup movie={movies[this.state.movieId]} isOpen={this.state.isOpen} daySelected={this.state.daySelected} />
+        <MovieList clusters={this.state.moviesCluster}/>
+        <NavigationBar buttonSelected={this.state.buttonSelected}/>
       </div>
     );
   }
 }
 
 ReactDOM.render(
-  <App/>,
+  <App />,
   document.getElementById('app')
 );
