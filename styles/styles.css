@@ -9,6 +9,12 @@ body {
         background-attachment: fixed;
         overflow-x: hidden;
 }
+/* remove default link style */
+a {
+    color: unset;
+    cursor: pointer;
+    text-decoration: unset;
+}
 
 .movieList{
     margin-bottom: 58px;
@@ -60,6 +66,4 @@ body {
 
 .scrollBlocked {
     overflow: hidden;
-    position: fixed;
-    width: 100%;
 }
