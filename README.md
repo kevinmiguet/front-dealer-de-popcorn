@@ -1,4 +1,4 @@
 * launch app
     parcel index.html
-* build app 
+* build app for production
     parcel build index.html

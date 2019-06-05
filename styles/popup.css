@@ -57,10 +57,10 @@
   font-weight: lighter;
   padding: 8px 0 7px 0;
 }
-.popup-elements {
+.popup-scroll {
   overflow-y: scroll;
 }
-.popup-elements::after {
+.popup-scroll::after {
   height: 21px;
   content: "";
   display: flex;

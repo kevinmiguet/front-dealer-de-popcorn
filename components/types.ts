@@ -7,7 +7,16 @@ export interface Movie {
     genres: string[];
     poster: string;
 }
-
+export interface Cinema {
+    id: string;
+    name: string;
+    url?: string;
+    address: string;
+    pos: {
+        lat: number;
+        lng: number;
+    };
+}
 export interface Week {
     lundi: string[];
     mardi: string[];
@@ -17,21 +26,10 @@ export interface Week {
     samedi: string[];
     dimanche: string[];
 }
-
-export interface Cinema {
-    id: string;
-    name: string;
-    address: string;
-    pos: {
-        lat: number;
-        lng: number;
-    };
-}
-
 export interface Schedule {
     movieId: string;
     cineId: string;
-    schedule: Week;
+    week: Week;
 }
 export interface Database {
     schedules: {[scheduleId: string]: Schedule};
