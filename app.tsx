@@ -1,10 +1,11 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { Movie, MovieCluster, Schedule, Cinema, Clusters, ClusterTitle, ClusterTitles } from './components/types';
+import { MovieCluster, ClusterTitle, ClusterTitles } from './components/types';
 import { MovieList } from './components/movie-list';
 import { Popup } from './components/popup';
 import { NavigationBar } from './components/navigation-bar';
 import { SearchBar } from './components/search-bar';
+import { isLegitMovieId, moviesClusters, getMovieCluster, getMovie, movies } from './logique/getters';
 
 function getStateFromHash(hash: string): AppState {
   const args = hash.split('/');
@@ -16,10 +17,9 @@ function getStateFromHash(hash: string): AppState {
     let argValue = args[i + 1]
 
     if (arg === 'movie') {
-      let movieId = argValue;
-      const isLegitId = Object.keys(movies).indexOf(movieId as any) > 0;
+      let movieId = argValue;;
       // if it's not a legit Id, just don't treat this argument
-      if (!isLegitId) {
+      if (!isLegitMovieId(movieId)) {
         i += 2;
         continue;
       }
@@ -41,7 +41,7 @@ function getStateFromHash(hash: string): AppState {
       // set 'recent' if argValue is not a ClusterTitle
       const isClusterTitle = ClusterTitles.indexOf(argValue as any) >= 0;
       let clusterName: any = isClusterTitle ? argValue : 'recent';
-      newState.moviesCluster = moviesClusters[clusterName];
+      newState.moviesCluster = getMovieCluster(clusterName);
       newState.buttonSelected = clusterName;
       i += 2;
       continue;
@@ -52,8 +52,7 @@ function getStateFromHash(hash: string): AppState {
   return newState
 }
 
-export const movies: { [id: string]: Movie } = require('./export/movies.json');
-export const moviesClusters: Clusters = require('./export/clusters.json');
+
 interface AppState {
   movieId?: string,
   isOpen?: boolean
@@ -112,7 +111,7 @@ class App extends React.Component<{}, AppState> {
     return (
       <div>
         <SearchBar setClusters={this.setClusters} setDefaultCluster={this.setBackCurrentMovieCluster}></SearchBar>
-        <Popup movie={movies[this.state.movieId]} isOpen={this.state.isOpen} daySelected={this.state.daySelected} />
+        <Popup movie={getMovie(this.state.movieId)} isOpen={this.state.isOpen} daySelected={this.state.daySelected} />
         <MovieList clusters={this.state.moviesCluster} />
         <NavigationBar buttonSelected={this.state.buttonSelected} />
       </div>

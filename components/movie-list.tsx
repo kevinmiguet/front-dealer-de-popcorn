@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { MovieCluster } from './types';
 import { MovieCard } from './movie-card';
-import { movies } from '../app';
+import { getMovie } from '../logique/getters';
 
 export class MovieList extends React.Component<{ clusters: MovieCluster[] }> {
     render() {
@@ -13,7 +13,7 @@ export class MovieList extends React.Component<{ clusters: MovieCluster[] }> {
                             {cluster.title !== '' ? <div className='movieCluster-title'>{cluster.title}</div> : ''}
                             <div className='movieCluster-content'>
                                 {cluster.movieIds.map(movieId => (
-                                    <MovieCard key={movieId} movie={movies[movieId]}></MovieCard>
+                                    <MovieCard key={movieId} movie={getMovie(movieId)}></MovieCard>
                                 ))}
                             </div>
                         </div>

@@ -1,25 +1,8 @@
 import * as React from 'react';
-import { Movie, Schedule, Cinema } from './types';
+import { Movie, Schedule } from './types';
+import { getSchedules, getCinema } from '../logique/getters';
 
-export const cinemas: { [id: string]: Cinema } = require('../export/cinemas.json');
-export const schedules: { [id: string]: Schedule } = require('../export/schedules.json');
 
-interface IndexedScheduleIds {
-    [id: string]: string[];
-};
-const scheduleIds = Object.keys(schedules);
-const indexedScheduleIds: IndexedScheduleIds = scheduleIds.reduce((_indexedScheduleIds, scheduleId) => {
-    const schedule = schedules[scheduleId];
-    if (!_indexedScheduleIds[schedule.cineId]) {
-        _indexedScheduleIds[schedule.cineId] = [];
-    }
-    if (!_indexedScheduleIds[schedule.movieId]) {
-        _indexedScheduleIds[schedule.movieId] = [];
-    }
-    _indexedScheduleIds[schedule.cineId].push(scheduleId);
-    _indexedScheduleIds[schedule.movieId].push(scheduleId);
-    return _indexedScheduleIds;
-}, {});
 const days = ['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche'];
 
 export class Popup extends React.Component<{ movie: Movie, isOpen: boolean, daySelected: number }, { popupContentHeight: number }> {
@@ -58,26 +41,28 @@ export class Popup extends React.Component<{ movie: Movie, isOpen: boolean, dayS
                     <DayButtons daySelected={this.props.daySelected} movieId={this.props.movie.id} />
                 </div>
                 <div className='popup-scroll' style={popupScrollStyle}>
-                    {indexedScheduleIds[this.props.movie.id].map(scheduleId => (
-                        <Schedule
-                            key={scheduleId}
-                            scheduleId={scheduleId}
-                            daySelected={this.props.daySelected}
-                        />
-                    ))}
+                {getSchedules(this.props.movie.id).map(schedule => {
+                    <Schedule
+                        key={`${schedule.movieId}-${schedule.cineId}`}
+                        schedule={schedule}
+                        daySelected={this.props.daySelected}
+                    />
+                })}
                 </div>
             </div>
         )
     };
 }
-const Schedule: React.FunctionComponent<{ scheduleId: string, daySelected: number }> = (props) => {
-    const daySchedules = schedules[props.scheduleId].week[days[props.daySelected]]
-    const cineId = schedules[props.scheduleId].cineId
-    if (daySchedules) {
+const Schedule: React.FunctionComponent<{ schedule: Schedule, daySelected: number }> = (props) => {
+    const selectedDaySchedules = props.schedule.week[days[props.daySelected]]
+    const cineId = props.schedule.cineId
+    const cinema = getCinema(cineId);
+    if (selectedDaySchedules) {
         return (
             <div className='popup-element'>
-                <div className='popup-element-title'>{cinemas[cineId] ? cinemas[cineId].name : cineId}</div>
-                {daySchedules.map(daySchedule => (
+                <div className='popup-element-title'>{cinema ? cinema.name : cineId}</div>
+                {/* display all times for selected day */}
+                {selectedDaySchedules.map(daySchedule => (
                     <div className='popup-element-bubble'>{daySchedule}</div>
                 ))}
             </div>
@@ -89,11 +74,9 @@ const Schedule: React.FunctionComponent<{ scheduleId: string, daySelected: numbe
 
 const DayButtons: React.FunctionComponent<{ daySelected: number, movieId: string }> = (props) => (
     <ul className='popup-days'>
-        {
-            days.map((day, i) =>(
-                <a key={i} className={props.daySelected === i ? 'selected popup-days-day' : 'popup-days-day'} href={`#/movie/${props.movieId}/day/${i}`}>{day}</a>
-            ))
-        }
+        {days.map((day, i) => (
+            <a key={i} className={props.daySelected === i ? 'selected popup-days-day' : 'popup-days-day'} href={`#/movie/${props.movieId}/day/${i}`}>{day}</a>
+        ))}
     </ul>
 )
 
