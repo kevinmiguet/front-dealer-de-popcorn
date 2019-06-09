@@ -1,5 +1,7 @@
-$PROD_DIR = /var/www/html/ugc/test09101991/dist
-$DEV_DIR = /var/www/html/repos/front-dealer-de-popcorn
+#!/bin/bash
+
+$PROD_DIR=/var/www/html/ugc/test09101991/dist
+$DEV_DIR=/var/www/html/repos/front-dealer-de-popcorn
 
 # Clean previous production directory
 rm -rf $PROD_DIR
