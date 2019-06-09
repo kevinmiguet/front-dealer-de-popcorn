@@ -88,6 +88,7 @@ class App extends React.Component<{}, AppState> {
       isOpen: false,
     })
   }
+  // used by search bar
   setClusters = (clusters: MovieCluster[]) => {
     this.setState({
       moviesCluster: clusters
