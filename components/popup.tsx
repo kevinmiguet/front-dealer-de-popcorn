@@ -41,13 +41,13 @@ export class Popup extends React.Component<{ movie: Movie, isOpen: boolean, dayS
                     <DayButtons daySelected={this.props.daySelected} movieId={this.props.movie.id} />
                 </div>
                 <div className='popup-scroll' style={popupScrollStyle}>
-                {getSchedules(this.props.movie.id).map(schedule => {
+                {getSchedules(this.props.movie.id).map(schedule => (
                     <Schedule
                         key={`${schedule.movieId}-${schedule.cineId}`}
                         schedule={schedule}
                         daySelected={this.props.daySelected}
                     />
-                })}
+                ))}
                 </div>
             </div>
         )
@@ -62,14 +62,19 @@ const Schedule: React.FunctionComponent<{ schedule: Schedule, daySelected: numbe
             <div className='popup-element'>
                 <div className='popup-element-title'>{cinema ? cinema.name : cineId}</div>
                 {/* display all times for selected day */}
-                {selectedDaySchedules.map(daySchedule => (
+                {selectedDaySchedules.VO && selectedDaySchedules.VO.map(daySchedule => (
+                    <div className='popup-element-bubble'>{daySchedule}</div>
+                ))}
+                {selectedDaySchedules.VF && selectedDaySchedules.VF.map(daySchedule => (
                     <div className='popup-element-bubble'>{daySchedule}</div>
                 ))}
             </div>
         )
     }
-    // react is not happy when returning nothing at all
-    return null
+    else {
+        // react is not happy when returning nothing at all
+        return null
+    }
 }
 
 const DayButtons: React.FunctionComponent<{ daySelected: number, movieId: string }> = (props) => (
