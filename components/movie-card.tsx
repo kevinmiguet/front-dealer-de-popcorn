@@ -7,7 +7,7 @@ export class MovieCard extends React.Component<{ movie: Movie }> {
       <li className="movie-card">
         <a href={`#/movie/${this.props.movie.id}/day/${0}`}>
           <img className="movie-poster"
-            src={`./export/posters/${this.props.movie.poster}`}
+            src={getPosterSrc(this.props.movie.poster)} 
           />
         </a>
         <div className="movie-title">{this.props.movie.title}</div>
@@ -15,4 +15,11 @@ export class MovieCard extends React.Component<{ movie: Movie }> {
       </li>
     );
   }
+}
+
+const getPosterSrc = (poster: string): string => {
+  if (poster) {
+    return `./export/posters/${poster}`
+  }
+  return './assets/default-poster.jpg'
 }

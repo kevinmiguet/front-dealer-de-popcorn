@@ -1,5 +1,5 @@
 import { MovieCluster } from '../components/types';
-import { moviesClusters, movies } from './getters';
+import { moviesClusters, movies, getMovie } from './getters';
 /* search by :
 // genre
 // acteurs
@@ -15,7 +15,7 @@ combien de résultats dans les suggestions ?
 qu'est-ce que les gens tapent dans un moteur de recherch de films ?
  "comédies"
  ""
-I 
+I
 */
 
 export function getSearchResult(search: string): MovieCluster[] {
@@ -28,10 +28,8 @@ export function getSearchResult(search: string): MovieCluster[] {
 }
 
 function getMoviesMatchingSearch(str: string): MovieCluster {
-    const allMovies = Object.keys(movies).map(movieId => movies[movieId])
-    const movieIds = allMovies
-        .filter(movie => areStringSimilar(str, movie.title))
-        .map(movie => movie.id)
+    const movieIds = Object.keys(movies)
+        .filter(movieId => areStringSimilar(str, getMovie(movieId).title))
     return { movieIds, title: '' }
 }
 
