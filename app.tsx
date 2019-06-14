@@ -111,10 +111,9 @@ class App extends React.Component<{}, AppState> {
   render() {
     return (
       <div>
-        <SearchBar setClusters={this.setClusters} setDefaultCluster={this.setBackCurrentMovieCluster}></SearchBar>
         <Popup movie={getMovie(this.state.movieId)} isOpen={this.state.isOpen} daySelected={this.state.daySelected} />
         <MovieList clusters={this.state.moviesCluster} />
-        <NavigationBar buttonSelected={this.state.buttonSelected} />
+        <NavigationBar buttonSelected={this.state.buttonSelected} setClusters={this.setClusters} setDefaultCluster={this.setBackCurrentMovieCluster} />
       </div>
     );
   }

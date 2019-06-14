@@ -2,14 +2,11 @@
     display: flex;
     flex-direction: column;
     max-width: 103px; 
-    /*  200 for bigger screen */
     margin-top: 8px;
     z-index: 1;
 }
 
 .movie-poster {
-    /* width: 200px;
-    height: 283px; */
     width: 103px;
     height: 146px;
     border-radius: 7px;
@@ -24,4 +21,14 @@
     font-size: 13px;
     margin-top: 6.3px;
     margin-left: 3px;
+}
+
+@media (min-width:961px)  { 
+    .movie-card {
+        max-width: 118px;     
+    }
+    .movie-poster {
+        width: 118px;
+        height: 170px;
+    }
 }

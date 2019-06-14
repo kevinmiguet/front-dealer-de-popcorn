@@ -3,6 +3,7 @@
   z-index: 2;
   background-color: rgb(9, 21, 66);
   width: 100%;
+  max-width: 1036px;
   height: 100%;
   color: white;
   top: 0;
@@ -93,4 +94,13 @@
   display: inline-block;
   border-bottom: solid #d0003b 2px;
   box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+}
+
+@media (min-width:961px)  { 
+  #popup {
+    top: 54px;
+  }
+  .popup-scroll::after {
+    height: 70px;
+  }
 }
