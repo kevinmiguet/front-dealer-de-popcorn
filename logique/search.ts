@@ -1,5 +1,5 @@
 import { MovieCluster } from '../components/types';
-import { movies, moviesClusters } from '../app';
+import { moviesClusters, movies } from './getters';
 /* search by :
 // genre
 // acteurs
