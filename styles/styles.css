@@ -37,7 +37,9 @@ a {
     margin-top: 22px;
     margin-bottom: 4px;
 }
-
+#search-bar-container{
+    display: none;
+}
 #search-bar {
     position: fixed;
     border-radius: 12px;
@@ -72,6 +74,9 @@ a {
 
 @media (min-width:961px)  { 
 
+    #search-bar-container{
+        display: unset;
+    }
     #search-bar {
         position: unset;
         padding: 7px 23px;

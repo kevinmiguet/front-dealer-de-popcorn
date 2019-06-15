@@ -9,7 +9,7 @@ export class SearchBar extends React.Component<{ setClusters: Function, setDefau
     }
     render() {
         return (
-            <div>
+            <div id='search-bar-container'>
                 <input
                     id='search-bar'
                     type='text'
