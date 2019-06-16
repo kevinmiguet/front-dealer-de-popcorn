@@ -1,4 +1,5 @@
 import { Schedule, Cinema, Movie, ClusterGroups } from '../components/types';
+import { distance } from './utils'
 export const cinemas: { [id: string]: Cinema } = require('../export/cinemas.json');
 export const schedules: { [id: string]: Schedule } = require('../export/schedules.json');
 export const movies: { [id: string]: Movie } = require('../export/movies.json');
@@ -76,4 +77,24 @@ export function getCurrentDay(): number {
     };
     const normalPeopleCurrentDay =  new Date().getDay();
     return normalPeopleWeekToCinemaWeek[normalPeopleCurrentDay];
+}
+
+// Geolocalized cinemas
+export function getCinemasCloseTo(position: Position) {
+    let cinemasAround: Cinema[] = []
+    for(let id in cinemas) {
+        const cine = cinemas[id]
+        // calculate distance
+        const d = distance(position.coords.latitude, 
+            position.coords.longitude, 
+            cine.pos.lat, 
+            cine.pos.lng)
+        
+        // get cinemas closer then 2 km
+        if (d < 2000) {
+            cinemasAround.push(cine)
+            console.log('close cinema: ' + cine.name + ', distance ' + d)
+        }
+    }
+    return cinemasAround
 }
