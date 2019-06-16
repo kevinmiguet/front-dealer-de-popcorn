@@ -17,6 +17,14 @@ a {
 }
 
 
+.row {
+    display:flex;
+}
+
+.aroundMeButton {
+    display: none
+}
+
 .popup-days::-webkit
 ::-webkit-scrollbar {
     width: 15px;

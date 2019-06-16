@@ -4,7 +4,9 @@ import { Cluster, ClusterGroupTitle, ClusterGroupTitles } from './components/typ
 import { Content } from './components/content';
 import { Popup, currentDay } from './components/popup';
 import { NavigationBar } from './components/navigation-bar';
-import { isLegitMovieId, getClusterGroup, getMovie, movies, clusterGroups } from './logique/getters';
+import { isLegitMovieId, getClusterGroup, getMovie, movies, clusterGroups, getCinemasCloseTo } from './logique/getters';
+import { SearchBar } from './components/search-bar';
+import { getCurrentPositionAsync } from './logique/utils'
 
 function getStateFromHash(hash: string): AppState {
   const args = hash.split('/');
@@ -97,6 +99,19 @@ class App extends React.Component<{}, AppState> {
     // Handle browser navigation events
     window.addEventListener('hashchange', this.navigated, false);
   }
+
+
+
+  async aroundMeClicked() {
+    try {
+      // get position
+      const position = await getCurrentPositionAsync()
+      // filter cinemas by distance
+      const cinemas = getCinemasCloseTo(position)
+      // todo apply cinemas filter to movie list
+    } catch(err) {}
+  }
+
   render() {
     return (
       <div>
