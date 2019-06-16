@@ -31,6 +31,11 @@ export function getSchedules(id: string): Schedule[] {
     return indexedScheduleIds[id].map(scId => schedules[scId])
 }
 
+// takes a cinema or movie Id and returns their schedules
+export function getSchedulesByDistance(id: string): Schedule[] {
+    return indexedScheduleIds[id].map(scId => schedules[scId])
+}
+
 //
 // Cinema
 //
