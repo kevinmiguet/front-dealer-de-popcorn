@@ -1,11 +1,12 @@
 import * as React from 'react';
 import { Movie } from './types';
+import { currentDay } from './popup';
 
 export class MovieCard extends React.Component<{ movie: Movie }> {
   render() {
     return (
       <li className="movie-card">
-        <a href={`#/movie/${this.props.movie.id}/day/${0}`}>
+        <a href={`#/movie/${this.props.movie.id}/day/${currentDay}`}>
           <img className="movie-poster"
             src={getPosterSrc(this.props.movie.poster)} 
           />

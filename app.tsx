@@ -4,7 +4,6 @@ import { MovieCluster, ClusterTitle, ClusterTitles } from './components/types';
 import { MovieList } from './components/movie-list';
 import { Popup, currentDay } from './components/popup';
 import { NavigationBar } from './components/navigation-bar';
-import { SearchBar } from './components/search-bar';
 import { isLegitMovieId, moviesClusters, getMovieCluster, getMovie, movies } from './logique/getters';
 
 function getStateFromHash(hash: string): AppState {
@@ -70,18 +69,6 @@ class App extends React.Component<{}, AppState> {
     buttonSelected: 'recent'
   };
   
-  setStateMovie = (movieId: string) => {
-    this.setState({
-      movieId,
-      isOpen: true,
-      daySelected: currentDay,
-    });
-  }
-  setDaySelected = (day: number) => {
-    this.setState({
-      daySelected: day
-    })
-  }
   setMoviesCluster = (clusterTitle: ClusterTitle) => {
     this.setState({
       moviesCluster: moviesClusters[clusterTitle],
