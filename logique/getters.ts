@@ -57,3 +57,18 @@ export function isLegitMovieId(movieId: any) {
 export function getMovieCluster(clusterName: string) {
     return moviesClusters[clusterName]
 }
+
+
+export function getCurrentDay(): number {
+    const normalPeopleWeekToCinemaWeek = {
+        0:4, // Dimanche: cinquième jour de semaine cinéma (qui commence mercredi)
+        1:5, // Lundi: sixième jour de semaine cinéma (qui commence mercredi)
+        2:6, // etc...
+        3:0,
+        4:1,
+        5:2,
+        6:3,
+    };
+    const normalPeopleCurrentDay =  new Date().getDay();
+    return normalPeopleWeekToCinemaWeek[normalPeopleCurrentDay];
+}

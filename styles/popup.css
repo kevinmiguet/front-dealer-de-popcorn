@@ -54,10 +54,17 @@
   min-width: 37%;
   text-align: center;
   background: #182065;
+  color: #4a57a0;
   font-family: arial,sans-serif;
   font-weight: lighter;
   padding: 8px 0 7px 0;
 }
+
+.past-day {
+  background-color: #0b194a;
+  color: #353a54;
+}
+
 .popup-scroll {
   overflow-y: scroll;
 }
@@ -93,14 +100,23 @@
 .selected {
   display: inline-block;
   border-bottom: solid #d0003b 2px;
+  color: white;
   box-shadow: 0 1px 3px rgba(0,0,0,0.12);
 }
 
 @media (min-width:961px)  { 
   #popup {
     top: 54px;
+    max-width: 686px;
   }
   .popup-scroll::after {
     height: 70px;
+  }
+  .popup-days-day {
+    min-width: unset;
+    width: 96px;
+  }
+  .popup-days{
+    overflow-x: unset;
   }
 }

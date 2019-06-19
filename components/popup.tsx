@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { Movie, Schedule } from './types';
-import { getSchedules, getCinema } from '../logique/getters';
+import { getSchedules, getCinema, getCurrentDay } from '../logique/getters';
 
 
-const days = ['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche'];
-
+const days = ['mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche', 'lundi', 'mardi'];
+export const currentDay = getCurrentDay();
 export class Popup extends React.Component<{ movie: Movie, isOpen: boolean, daySelected: number }, { popupContentHeight: number }> {
     constructor(props) {
         super(props);
@@ -79,9 +79,12 @@ const Schedule: React.FunctionComponent<{ schedule: Schedule, daySelected: numbe
 
 const DayButtons: React.FunctionComponent<{ daySelected: number, movieId: string }> = (props) => (
     <ul className='popup-days'>
-        {days.map((day, i) => (
-            <a key={i} className={props.daySelected === i ? 'selected popup-days-day' : 'popup-days-day'} href={`#/movie/${props.movieId}/day/${i}`}>{day}</a>
-        ))}
+        {days.map((day, i) => {
+            let dayClass = i < currentDay ? 'popup-days-day past-day' : 'popup-days-day'
+        return (
+            <a key={i} className={props.daySelected === i ? `selected ${dayClass}` : dayClass} href={`#/movie/${props.movieId}/day/${i}`}>{day}</a>
+        )
+        })}
     </ul>
 )
 

@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { MovieCluster, ClusterTitle, ClusterTitles } from './components/types';
 import { MovieList } from './components/movie-list';
-import { Popup } from './components/popup';
+import { Popup, currentDay } from './components/popup';
 import { NavigationBar } from './components/navigation-bar';
 import { SearchBar } from './components/search-bar';
 import { isLegitMovieId, moviesClusters, getMovieCluster, getMovie, movies } from './logique/getters';
@@ -66,14 +66,15 @@ class App extends React.Component<{}, AppState> {
     isOpen: false,
     movieId: Object.keys(movies)[0],
     moviesCluster: moviesClusters.recent,
-    daySelected: 0,
+    daySelected: currentDay,
     buttonSelected: 'recent'
   };
+  
   setStateMovie = (movieId: string) => {
     this.setState({
       movieId,
       isOpen: true,
-      daySelected: 0,
+      daySelected: currentDay,
     });
   }
   setDaySelected = (day: number) => {
@@ -97,6 +98,7 @@ class App extends React.Component<{}, AppState> {
   setBackCurrentMovieCluster = () => {
     this.setMoviesCluster(this.state.buttonSelected);
   }
+
   navigated = () => {
     const newState = getStateFromHash(window.location.hash)
     this.setState(newState);
