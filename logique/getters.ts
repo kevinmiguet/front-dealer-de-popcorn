@@ -1,8 +1,8 @@
-import { Schedule, Cinema, Movie, Clusters } from '../components/types';
+import { Schedule, Cinema, Movie, ClusterGroups } from '../components/types';
 export const cinemas: { [id: string]: Cinema } = require('../export/cinemas.json');
 export const schedules: { [id: string]: Schedule } = require('../export/schedules.json');
 export const movies: { [id: string]: Movie } = require('../export/movies.json');
-export const moviesClusters: Clusters = require('../export/clusters.json');
+export const clusterGroups: ClusterGroups = require('../export/clusters.json');
 
 //
 // Schedules
@@ -54,8 +54,8 @@ export function isLegitMovieId(movieId: any) {
 // Cluster
 // 
 
-export function getMovieCluster(clusterName: string) {
-    return moviesClusters[clusterName]
+export function getClusterGroup(clusterGroupName: string) {
+    return clusterGroups[clusterGroupName]
 }
 
 

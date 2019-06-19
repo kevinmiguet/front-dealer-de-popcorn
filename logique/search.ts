@@ -1,5 +1,5 @@
-import { MovieCluster } from '../components/types';
-import { moviesClusters, movies, getMovie } from './getters';
+import { Cluster } from '../components/types';
+import { clusterGroups, movies, getMovie } from './getters';
 /* search by :
 // genre
 // acteurs
@@ -18,8 +18,8 @@ qu'est-ce que les gens tapent dans un moteur de recherch de films ?
 I
 */
 
-export function getSearchResult(search: string): MovieCluster[] {
-    let result: MovieCluster[] = [];
+export function getSearchResult(search: string): Cluster[] {
+    let result: Cluster[] = [];
     // cluster with all movies containing keyword
     result.push(getMoviesMatchingSearch(search))
     result = result.concat(getClustersMatchingSearch(search));
@@ -27,18 +27,18 @@ export function getSearchResult(search: string): MovieCluster[] {
     return result;
 }
 
-function getMoviesMatchingSearch(str: string): MovieCluster {
+function getMoviesMatchingSearch(str: string): Cluster {
     const movieIds = Object.keys(movies)
         .filter(movieId => areStringSimilar(str, getMovie(movieId).title))
     return { movieIds, title: '' }
 }
 
-function getClustersMatchingSearch(str: string): MovieCluster[] {
-    const clusters = [...moviesClusters.old, ...moviesClusters.recent, ...moviesClusters.retro]
+function getClustersMatchingSearch(str: string): Cluster[] {
+    const clusters = [...clusterGroups.old, ...clusterGroups.recent, ...clusterGroups.retro]
     return clusters.filter(cluster => areStringSimilar(str, cluster.title))
 }
 
-function getDirectorsMatchingSearch(str: string): MovieCluster {
+function getDirectorsMatchingSearch(str: string): Cluster {
     return Object.keys(movies)
         .filter(movieId => areStringSimilar(str, movies[movieId].directors[0]))
         .reduce((cluster, movieId) => { 

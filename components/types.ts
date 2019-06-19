@@ -37,13 +37,13 @@ export interface Database {
     cinemas: {[cinemaId: string]: Cinema};
 }
 
-export interface MovieCluster {
+export interface Cluster {
     // type: 'carousel' | 'classic';
     movieIds: string[];
     title?: string;
 }
-export type ClusterTitle = 'recent' | 'retro' | 'old';
-export const ClusterTitles: ClusterTitle[] = ['old','recent', 'retro']
-export type Clusters = {
-    [cluster in ClusterTitle]: MovieCluster[]
+export type ClusterGroupTitle = 'recent' | 'retro' | 'old';
+export const ClusterGroupTitles: ClusterGroupTitle[] = ['old','recent', 'retro']
+export type ClusterGroups = {
+    [clusterGroup in ClusterGroupTitle]: Cluster[]
 }

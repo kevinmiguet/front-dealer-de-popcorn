@@ -1,10 +1,10 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { MovieCluster, ClusterTitle, ClusterTitles } from './components/types';
+import { Cluster, ClusterGroupTitle, ClusterGroupTitles } from './components/types';
 import { MovieList } from './components/movie-list';
 import { Popup, currentDay } from './components/popup';
 import { NavigationBar } from './components/navigation-bar';
-import { isLegitMovieId, moviesClusters, getMovieCluster, getMovie, movies } from './logique/getters';
+import { isLegitMovieId, getClusterGroup, getMovie, movies, clusterGroups } from './logique/getters';
 
 function getStateFromHash(hash: string): AppState {
   const args = hash.split('/');
@@ -37,53 +37,50 @@ function getStateFromHash(hash: string): AppState {
     }
 
     else if (arg === 'cluster') {
-      // set 'recent' if argValue is not a ClusterTitle
-      const isClusterTitle = ClusterTitles.indexOf(argValue as any) >= 0;
-      let clusterName: any = isClusterTitle ? argValue : 'recent';
-      newState.moviesCluster = getMovieCluster(clusterName);
+      // set 'recent' if argValue is not a ClusterGroupTitle
+      const isClusterGroupTitle = ClusterGroupTitles.indexOf(argValue as any) >= 0;
+      let clusterName: any = isClusterGroupTitle ? argValue : 'recent';
+      newState.clusters = getClusterGroup(clusterName);
       newState.buttonSelected = clusterName;
       i += 2;
       continue;
     }
     i++;
   }
-
   return newState
 }
-
 
 interface AppState {
   movieId?: string,
   isOpen?: boolean
-  moviesCluster?: MovieCluster[],
+  clusters?: Cluster[],
   daySelected?: number;
-  buttonSelected?: ClusterTitle
+  buttonSelected?: ClusterGroupTitle
 }
 
 class App extends React.Component<{}, AppState> {
   state: AppState = {
     isOpen: false,
     movieId: Object.keys(movies)[0],
-    moviesCluster: moviesClusters.recent,
+    clusters: clusterGroups.recent,
     daySelected: currentDay,
     buttonSelected: 'recent'
   };
   
-  setMoviesCluster = (clusterTitle: ClusterTitle) => {
+  // used by search bar
+  setClusters = (clusters: Cluster[]) => {
     this.setState({
-      moviesCluster: moviesClusters[clusterTitle],
+      clusters: clusters
+    });
+  }
+
+  setBackCurrentMovieCluster = () => {
+    const clusterTitle = this.state.buttonSelected;
+    this.setState({
+      clusters: clusterGroups[clusterTitle],
       buttonSelected: clusterTitle,
       isOpen: false,
     })
-  }
-  // used by search bar
-  setClusters = (clusters: MovieCluster[]) => {
-    this.setState({
-      moviesCluster: clusters
-    });
-  }
-  setBackCurrentMovieCluster = () => {
-    this.setMoviesCluster(this.state.buttonSelected);
   }
 
   navigated = () => {
@@ -101,7 +98,7 @@ class App extends React.Component<{}, AppState> {
     return (
       <div>
         <Popup movie={getMovie(this.state.movieId)} isOpen={this.state.isOpen} daySelected={this.state.daySelected} />
-        <MovieList clusters={this.state.moviesCluster} />
+        <MovieList clusters={this.state.clusters} />
         <NavigationBar buttonSelected={this.state.buttonSelected} setClusters={this.setClusters} setDefaultCluster={this.setBackCurrentMovieCluster} />
       </div>
     );

@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { ClusterTitle } from './types';
+import { ClusterGroupTitle } from './types';
 import { SearchBar } from './search-bar';
 
 interface NavigationBarProps {
-    buttonSelected: ClusterTitle,
+    buttonSelected: ClusterGroupTitle,
     setClusters: Function,
     setDefaultCluster: Function
 }
