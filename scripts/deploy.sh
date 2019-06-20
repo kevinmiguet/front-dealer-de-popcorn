@@ -9,3 +9,4 @@ rm -rf $PROD_DIR
 cd $DEV_DIR && parcel build index.html --public-url ./ -d $PROD_DIR
 # copy export folder
 cp -r $DEV_DIR/export $PROD_DIR/export
+cp -r $DEV_DIR/assets $PROD_DIR/assets
