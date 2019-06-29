@@ -1,6 +1,6 @@
 #!/bin/bash
 
-PROD_DIR=/var/www/html/ugc/test09101991/
+PROD_DIR=/var/www/html/ugc/
 DEV_DIR=/var/www/html/repos/front-dealer-de-popcorn
 
 # Clean previous production directory
