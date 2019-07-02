@@ -5,20 +5,13 @@ import { getSchedules, getCinema, getCurrentDay } from '../logique/getters';
 
 const days = ['mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche', 'lundi', 'mardi'];
 export const currentDay = getCurrentDay();
-export class Popup extends React.Component<{ movie: Movie, isOpen: boolean, daySelected: number }, { popupContentHeight: number }> {
+export class Popup extends React.Component<{ movie: Movie, isPopupOpened: boolean, daySelected: number, getDefaultUrl: Function }, { popupContentHeight: number }> {
     constructor(props) {
         super(props);
         this.state = {
             popupContentHeight: 0,
         };
         this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
-    }
-    componentWillReceiveProps(newProps) {
-        if (newProps.isOpen) {
-            document.getElementsByTagName("body")[0].className = 'scrollBlocked';
-        } else {
-            document.getElementsByTagName("body")[0].removeAttribute('class');
-        }
     }
     componentDidMount() {
         this.updateWindowDimensions();
@@ -35,19 +28,19 @@ export class Popup extends React.Component<{ movie: Movie, isOpen: boolean, dayS
     render() {
         const popupScrollStyle = { height: this.state.popupContentHeight };
         return (
-            <div id='popup' className={this.props.isOpen ? 'popup-open' : 'popup-close'}>
+            <div id='popup' className={this.props.isPopupOpened ? 'popup-open' : 'popup-close'}>
                 <div className='popup-fixed'>
-                    <PopupHeader movie={this.props.movie} />
+                    <PopupHeader movie={this.props.movie} getDefaultUrl={this.props.getDefaultUrl} />
                     <DayButtons daySelected={this.props.daySelected} movieId={this.props.movie.id} />
                 </div>
                 <div className='popup-scroll' style={popupScrollStyle}>
-                {getSchedules(this.props.movie.id).map(schedule => (
-                    <Schedule
-                        key={`${schedule.movieId}-${schedule.cineId}`}
-                        schedule={schedule}
-                        daySelected={this.props.daySelected}
-                    />
-                ))}
+                    {getSchedules(this.props.movie.id).map(schedule => (
+                        <Schedule
+                            key={`${schedule.movieId}-${schedule.cineId}`}
+                            schedule={schedule}
+                            daySelected={this.props.daySelected}
+                        />
+                    ))}
                 </div>
             </div>
         )
@@ -81,19 +74,29 @@ const DayButtons: React.FunctionComponent<{ daySelected: number, movieId: string
     <ul className='popup-days'>
         {days.map((day, i) => {
             let dayClass = i < currentDay ? 'popup-days-day past-day' : 'popup-days-day'
-        return (
-            <a key={i} className={props.daySelected === i ? `selected ${dayClass}` : dayClass} href={`#/movie/${props.movieId}/day/${i}`}>{day}</a>
-        )
+            return (
+                <a key={i} className={props.daySelected === i ? `selected ${dayClass}` : dayClass} href={`#/movie/${props.movieId}/day/${i}`}>{day}</a>
+            )
         })}
     </ul>
 )
 
-const PopupHeader: React.FunctionComponent<{ movie: Movie }> = (props) => (
+const PopupHeader: React.FunctionComponent<{ movie: Movie, getDefaultUrl: Function }> = (props) => (
     <div className='popup-header'>
         <img className='movie-poster' src={`./export/posters/${props.movie.poster}`}></img>
         <div className='popup-header-right'>
             <div className='popup-header-right-title'> {props.movie.title}</div>
             <div className='popup-header-right-director'> {props.movie.directors[0]}</div>
         </div>
+        <a href={props.getDefaultUrl()}>
+            <CloseIcon/>
+        </a>
     </div>
+)
+
+const CloseIcon: React.FunctionComponent<{}> = (props) => (
+    <svg id="icon-close" width="10" height="16" viewBox="0 0 5 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M4 1L1 4" stroke="white" stroke-width="1" stroke-linecap="round" />
+    <path d="M1 4L4 7" stroke="white" stroke-width="1" stroke-linecap="round"/>
+    </svg>
 )

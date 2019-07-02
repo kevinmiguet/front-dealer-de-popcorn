@@ -1,6 +1,6 @@
 
 #popup {
-  z-index: 2;
+  z-index: 3;
   background-color: rgb(9, 21, 66);
   width: 100%;
   max-width: 1036px;
@@ -103,6 +103,11 @@
   color: white;
   box-shadow: 0 1px 3px rgba(0,0,0,0.12);
 }
+#icon-close {
+  position: absolute;
+  right: 16px;
+  top: 16px;
+}
 
 @media (min-width:961px)  { 
   #popup {
@@ -119,4 +124,5 @@
   .popup-days{
     overflow-x: unset;
   }
+
 }

@@ -10,7 +10,7 @@ function getStateFromHash(hash: string): AppState {
   const args = hash.split('/');
   let newState: AppState = {};
   let i = 1; // first one is always #
-  newState.isOpen = false; // popup is closed by default
+  newState.isPopupOpened = false; // popup is closed by default
   while (i < args.length) {
     let arg = args[i];
     let argValue = args[i + 1]
@@ -23,7 +23,7 @@ function getStateFromHash(hash: string): AppState {
         continue;
       }
       newState.movieId = movieId;
-      newState.isOpen = true;
+      newState.isPopupOpened = true;
       i += 2;
       continue;
     }
@@ -41,7 +41,7 @@ function getStateFromHash(hash: string): AppState {
       const isClusterGroupTitle = ClusterGroupTitles.indexOf(argValue as any) >= 0;
       let clusterName: any = isClusterGroupTitle ? argValue : 'recent';
       newState.clusters = getClusterGroup(clusterName);
-      newState.buttonSelected = clusterName;
+      newState.clusterSelected = clusterName;
       i += 2;
       continue;
     }
@@ -50,21 +50,21 @@ function getStateFromHash(hash: string): AppState {
   return newState
 }
 
-interface AppState {
+export interface AppState {
   movieId?: string,
-  isOpen?: boolean
+  isPopupOpened?: boolean
   clusters?: Cluster[],
   daySelected?: number;
-  buttonSelected?: ClusterGroupTitle
+  clusterSelected?: ClusterGroupTitle
 }
 
 class App extends React.Component<{}, AppState> {
   state: AppState = {
-    isOpen: false,
+    isPopupOpened: false,
     movieId: Object.keys(movies)[0],
     clusters: clusterGroups.recent,
     daySelected: currentDay,
-    buttonSelected: 'recent'
+    clusterSelected: 'recent'
   };
   
   // used by search bar
@@ -75,13 +75,16 @@ class App extends React.Component<{}, AppState> {
   }
 
   setBackCurrentMovieCluster = () => {
-    const clusterTitle = this.state.buttonSelected;
+    const clusterTitle = this.state.clusterSelected;
     this.setState({
       clusters: clusterGroups[clusterTitle],
-      buttonSelected: clusterTitle,
-      isOpen: false,
+      clusterSelected: clusterTitle,
+      isPopupOpened: false,
     })
   }
+
+  getDefaultUrl = (): string => `#/cluster/${this.state.clusterSelected}`
+  
 
   navigated = () => {
     const newState = getStateFromHash(window.location.hash)
@@ -97,9 +100,9 @@ class App extends React.Component<{}, AppState> {
   render() {
     return (
       <div>
-        <Popup movie={getMovie(this.state.movieId)} isOpen={this.state.isOpen} daySelected={this.state.daySelected} />
-        <MovieList clusters={this.state.clusters} />
-        <NavigationBar buttonSelected={this.state.buttonSelected} setClusters={this.setClusters} setDefaultCluster={this.setBackCurrentMovieCluster} />
+        <Popup movie={getMovie(this.state.movieId)} isPopupOpened={this.state.isPopupOpened} daySelected={this.state.daySelected} getDefaultUrl={this.getDefaultUrl} />
+        <MovieList clusters={this.state.clusters} isPopupOpened={this.state.isPopupOpened} getDefaultUrl={this.getDefaultUrl} />
+        <NavigationBar clusterSelected={this.state.clusterSelected} setClusters={this.setClusters} setDefaultCluster={this.setBackCurrentMovieCluster} />
       </div>
     );
   }

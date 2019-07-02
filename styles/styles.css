@@ -7,7 +7,7 @@ body {
         margin: 0;
         background-repeat: no-repeat;
         background-attachment: fixed;
-        overflow-x: hidden;
+        overflow: hidden;
 }
 /* remove default link style */
 a {
@@ -16,27 +16,7 @@ a {
     text-decoration: unset;
 }
 
-.movieList{
-    margin-bottom: 58px;
-}
 
-.cluster {
-    margin-bottom: 40px;
-}
-
-.cluster-content {
-    display: grid; /* 1 */
-  grid-template-columns: repeat(auto-fill, 103px); /* 2 */
-  grid-column-gap: 3px; /* 3 */
-  justify-content: space-evenly; /* 4 */
-}
-
-.cluster-title{
-    font-size: 20px;
-    margin-left: 9px;
-    margin-top: 22px;
-    margin-bottom: 4px;
-}
 #search-bar-container{
     display: none;
 }
@@ -68,41 +48,6 @@ a {
     background-color: #0A4C95;
 }
 
-.scrollBlocked {
+.no-scroll {
     overflow: hidden;
-}
-
-@media (min-width:961px)  { 
-
-    #search-bar-container{
-        display: unset;
-    }
-    #search-bar {
-        position: unset;
-        padding: 7px 23px;
-        width: 277px;
-        background-color: #dadada
-    }
-
-    #search-bar:focus {
-        outline: none;
-        background-color:white
-    }
-
-    .cluster-title {
-        font-size: 28px;
-        margin-left: 9px;
-        margin-top: 24px;
-        margin-bottom: 16px;
-    }
-
-    .cluster-content {
-        grid-template-columns: repeat(auto-fill, 118px); /* 2 */
-        grid-column-gap: 26px; /* 3 */
-    }
-
-    .movieList{
-        padding: 0px 95px;
-        margin-top: 80px;
-    }
 }

@@ -38,7 +38,6 @@ export interface Database {
 }
 
 export interface Cluster {
-    // type: 'carousel' | 'classic';
     movieIds: string[];
     title?: string;
 }
