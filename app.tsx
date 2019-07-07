@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { Cluster, ClusterGroupTitle, ClusterGroupTitles } from './components/types';
-import { MovieList } from './components/movie-list';
+import { Content } from './components/content';
 import { Popup, currentDay } from './components/popup';
 import { NavigationBar } from './components/navigation-bar';
 import { isLegitMovieId, getClusterGroup, getMovie, movies, clusterGroups } from './logique/getters';
@@ -101,7 +101,7 @@ class App extends React.Component<{}, AppState> {
     return (
       <div>
         <Popup movie={getMovie(this.state.movieId)} isPopupOpened={this.state.isPopupOpened} daySelected={this.state.daySelected} getDefaultUrl={this.getDefaultUrl} />
-        <MovieList clusters={this.state.clusters} isPopupOpened={this.state.isPopupOpened} getDefaultUrl={this.getDefaultUrl} />
+        <Content clusters={this.state.clusters} isPopupOpened={this.state.isPopupOpened} getDefaultUrl={this.getDefaultUrl} />
         <NavigationBar clusterSelected={this.state.clusterSelected} setClusters={this.setClusters} setDefaultCluster={this.setBackCurrentMovieCluster} />
       </div>
     );

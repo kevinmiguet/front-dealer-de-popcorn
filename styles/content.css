@@ -74,9 +74,7 @@
         }
 
         #content {
-            height: 100vh;
-            overflow-y: scroll;
-            margin-top: 54px;
+            margin-top: 80px;
         }
     }
     

@@ -2,8 +2,12 @@ import * as React from 'react';
 import { Cluster } from './types';
 import { MovieCard } from './movie-card';
 import { getMovie } from '../logique/getters';
+import { scrollTop } from '../logique/utils';
 
-export class MovieList extends React.Component<{ clusters: Cluster[], isPopupOpened: boolean, getDefaultUrl: Function }> {
+export class Content extends React.Component<{ clusters: Cluster[], isPopupOpened: boolean, getDefaultUrl: Function }> {
+    componentDidUpdate() {
+        scrollTop();
+    }
     render() {
         return (
             <div id="content">

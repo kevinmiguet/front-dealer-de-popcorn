@@ -5,7 +5,10 @@ export interface Movie {
     actors: string[];
     directors: string[];
     genres: string[];
-    poster: string;
+    poster?: string;
+    releaseDate?: string;
+    countries?: string[];
+    summary?: string;
 }
 export interface Cinema {
     id: string;
@@ -18,19 +21,17 @@ export interface Cinema {
     };
 }
 export interface Week {
-    lundi: string[];
-    mardi: string[];
-    mercredi: string[];
-    jeudi: string[];
-    vendredi: string[];
-    samedi: string[];
-    dimanche: string[];
+    [dayname: string]: {
+        VO?: string[];
+        VF?: string[];
+    };
 }
 export interface Schedule {
     movieId: string;
     cineId: string;
     week: Week;
 }
+
 export interface Database {
     schedules: {[scheduleId: string]: Schedule};
     movies: {[movieId: string]: Movie};

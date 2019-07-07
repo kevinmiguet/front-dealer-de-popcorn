@@ -55,9 +55,15 @@ const Schedule: React.FunctionComponent<{ schedule: Schedule, daySelected: numbe
             <div className='popup-element'>
                 <div className='popup-element-title'>{cinema ? cinema.name : cineId}</div>
                 {/* display all times for selected day */}
+                {selectedDaySchedules.VO && (
+                    <div className='version'> VO </div>
+                )}
                 {selectedDaySchedules.VO && selectedDaySchedules.VO.map(daySchedule => (
                     <div className='popup-element-bubble'>{daySchedule}</div>
                 ))}
+                 {selectedDaySchedules.VF && (
+                    <div className='version'> VF </div>
+                )}
                 {selectedDaySchedules.VF && selectedDaySchedules.VF.map(daySchedule => (
                     <div className='popup-element-bubble'>{daySchedule}</div>
                 ))}
