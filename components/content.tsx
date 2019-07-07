@@ -5,8 +5,11 @@ import { getMovie } from '../logique/getters';
 import { scrollTop } from '../logique/utils';
 
 export class Content extends React.Component<{ clusters: Cluster[], isPopupOpened: boolean, getDefaultUrl: Function }> {
-    componentDidUpdate() {
-        scrollTop();
+    componentWillReceiveProps(newProps) {
+        if (newProps.clusters.length !== this.props.clusters.length || newProps.clusters[0].title !== this.props.clusters[0].title) {
+            scrollTop();
+        }
+
     }
     render() {
         return (
