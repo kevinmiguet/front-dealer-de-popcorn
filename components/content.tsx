@@ -28,7 +28,7 @@ export class Content extends React.Component<{ clusters: Cluster[], isPopupOpene
 }
 
 const ClusterElement: React.FunctionComponent<{ cluster: Cluster }> = ({ cluster }) => (
-    <div className='cluster'>
+    <div className='cluster' id={cluster.id}>
         {cluster.title !== '' ? <div className='cluster-title'>{cluster.title}</div> : ''}
         <div className='cluster-content'>
             {cluster.movieIds.map(movieId => (

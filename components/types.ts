@@ -41,6 +41,7 @@ export interface Database {
 export interface Cluster {
     movieIds: string[];
     title?: string;
+    id: string;
 }
 export type ClusterGroupTitle = 'recent' | 'retro' | 'old';
 export const ClusterGroupTitles: ClusterGroupTitle[] = ['old','recent', 'retro']

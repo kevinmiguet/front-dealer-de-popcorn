@@ -76,5 +76,14 @@
         #content {
             margin-top: 80px;
         }
+
+        #cluster-weekly .cluster-content {
+            grid-template-columns: repeat(auto-fill, 152px);
+        }
+
+        #cluster-weekly .movie-poster {
+            width: 152px;
+            height: 212px;
+        }
     }
     
