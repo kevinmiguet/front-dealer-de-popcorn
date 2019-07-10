@@ -14,13 +14,11 @@
 
 .movie-director {
     font-size: 11px;
-    margin-left: 3px;
     color: #797a81;
 }
 .movie-title {
     font-size: 13px;
-    margin-top: 6.3px;
-    margin-left: 3px;
+    margin-top: 4px;
 }
 
 @media (min-width:961px)  { 
@@ -28,7 +26,7 @@
         max-width: 118px;     
     }
     .movie-poster {
-        width: 118px;
-        height: 170px;
+        width: 120px;
+        height: 168px;
     }
 }

@@ -9,8 +9,8 @@ export class Content extends React.Component<{ clusters: Cluster[], isPopupOpene
         if (newProps.clusters.length !== this.props.clusters.length || newProps.clusters[0].title !== this.props.clusters[0].title) {
             scrollTop();
         }
-
     }
+
     render() {
         return (
             <div id="content">
