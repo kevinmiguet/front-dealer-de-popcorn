@@ -48,5 +48,5 @@ function distanceEdition(search, tag) {
 }
 
 
-const searchBar = document.getElementById('search-bar');
+const searchBar = document.getElementById('search-bar-input');
 searchBar.onkeyup = () => console.log(getSearchResult(searchBar.value));

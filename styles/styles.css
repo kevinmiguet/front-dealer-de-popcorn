@@ -17,16 +17,6 @@ a {
 }
 
 
-#search-bar-container{
-    display: none;
-}
-#search-bar {
-    position: fixed;
-    border-radius: 12px;
-    border-style: none;
-    padding: 3px 17px;
-}
-
 .popup-days::-webkit
 ::-webkit-scrollbar {
     width: 15px;

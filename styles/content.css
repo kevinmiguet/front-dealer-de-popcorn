@@ -41,23 +41,8 @@
         margin-top: 22px;
         margin-bottom: 4px;
     }
-
-    @media (min-width:961px)  { 
-
-        #search-bar-container{
-            display: unset;
-        }
-        #search-bar {
-            position: unset;
-            padding: 7px 23px;
-            width: 277px;
-            background-color: #dadada
-        }
     
-        #search-bar:focus {
-            outline: none;
-            background-color:white
-        }
+    @media (min-width:961px)  { 
     
         .cluster-title {
             font-size: 28px;

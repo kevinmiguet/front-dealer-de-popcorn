@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Movie, Schedule } from './types';
 import { getSchedules, getCinema, getCurrentDay } from '../logique/getters';
+import { CloseIcon } from './icons';
 
 
 const days = ['mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche', 'lundi', 'mardi'];
@@ -93,16 +94,10 @@ const PopupHeader: React.FunctionComponent<{ movie: Movie, getDefaultUrl: Functi
         <div className='popup-header-right'>
             <div className='popup-header-right-title'> {props.movie.title}</div>
             <div className='popup-header-right-director'> {props.movie.directors[0]}</div>
+            <div className='popup-header-right-summary'> {props.movie.summary}</div>
         </div>
         <a id='icon-close' href={props.getDefaultUrl()}>
             <CloseIcon/>
         </a>
     </div>
-)
-
-const CloseIcon: React.FunctionComponent<{}> = (props) => (
-    <svg width="10" height="16" viewBox="0 0 5 8" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M4 1L1 4" stroke="white" stroke-width="1" stroke-linecap="round" />
-    <path d="M1 4L4 7" stroke="white" stroke-width="1" stroke-linecap="round"/>
-    </svg>
 )
