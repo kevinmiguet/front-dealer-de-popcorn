@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { ClusterGroupTitle } from './types';
 import { SearchBar } from './search-bar';
+import { FilterIcon } from './icons';
 
 interface NavigationBarProps {
     clusterSelected: ClusterGroupTitle,

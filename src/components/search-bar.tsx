@@ -14,6 +14,7 @@ export class SearchBar extends React.Component<{ setClusters: Function, setDefau
 
     onFocus = () => this.setState({focused: true})
     onBlur = () => this.setState({focused: false})
+    
     focus = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         event.preventDefault(); // so that we don't blur
         const searchInput = document.getElementById('search-bar-input');

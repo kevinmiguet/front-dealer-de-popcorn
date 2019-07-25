@@ -34,7 +34,7 @@ export class Popup extends React.Component<{ movie: Movie, isPopupOpened: boolea
     }
 
     updateWindowDimensions() {
-        this.setState({ popupContentHeight: window.innerHeight - 288 });
+        this.setState({ popupContentHeight: window.innerHeight - 600 });
     }
 
     render() {
@@ -85,7 +85,7 @@ export const ScheduleComponent: React.FunctionComponent<{ schedule: Schedule, da
                 {selectedDaySchedules.VO && selectedDaySchedules.VO.map(daySchedule => (
                     <div key={daySchedule} className='popup-element-bubble'>{daySchedule}</div>
                 ))}
-                 {selectedDaySchedules.VF && (
+                {selectedDaySchedules.VF && (
                     <div className='version'> VF </div>
                 )}
                 {selectedDaySchedules.VF && selectedDaySchedules.VF.map(daySchedule => (
@@ -112,14 +112,21 @@ export const DayButtons: React.FunctionComponent<{ daySelected: number, movieId:
 // exported for testing
 export const PopupHeader: React.FunctionComponent<{ movie: Movie, getDefaultUrl: Function }> = (props) => (
     <div className='popup-header'>
-        <img className='movie-poster' src={`./export/posters/${props.movie.poster}`}></img>
-        <div className='popup-header-right'>
-            <div className='popup-header-right-title'> {props.movie.title}</div>
-            <div className='popup-header-right-director'> {props.movie.directors[0]}</div>
-            <div className='popup-header-right-summary'> {props.movie.summary}</div>
+        <div className='popup-header-top'>
+            <div className='popup-header-left'>
+                <div className='popup-header-title'> {props.movie.title}</div>
+                <div className='popup-header-director'> {props.movie.directors[0]}</div>
+            </div>
+            <div className='popup-header-right'>
+                <img className='movie-poster' src={`./export/posters/${props.movie.poster}`}></img>
+            </div>
         </div>
-        <a id='icon-close' href={props.getDefaultUrl()}>
-            <CloseIcon/>
-        </a>
+        <hr/>
+        <div className='popup-header-bottom'>
+            <h1>Ça raconte quoi ?</h1>
+            <div className='popup-header-summary'> {props.movie.summary}</div>
+        </div>
+
+        <a id='icon-close' href={props.getDefaultUrl()}><CloseIcon /></a>
     </div>
 )
