@@ -3,7 +3,7 @@
   z-index: 3;
   background-color: rgb(9, 21, 66);
   width: 100%;
-  max-width: 1036px;
+  max-width: 880px;
   height: 100%;
   color: white;
   top: 0;
@@ -27,7 +27,7 @@
 .popup-header-top {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 40px;
+  margin-bottom: 24px;
 }
 .popup-header-right {
   margin-left: 16px;
@@ -45,11 +45,10 @@
   font-size: 24px;
 }
 .popup-header-director {
-  margin: 3px;
-  font-size: 17px;
+  font-size: 20px;
 }
 .popup-header-summary {
-  font-size: 17px;
+  font-size: 16px;
 }
 
 .popup-days{
@@ -72,7 +71,12 @@
   font-weight: lighter;
   padding: 8px 0 7px 0;
 }
-
+.day-name{
+  font-size: 14px;
+}
+.day-number{
+  font-size: 24px;
+}
 .past-day {
   background-color: #0b194a;
   color: #353a54;
@@ -142,9 +146,9 @@
 
 #popup h1 {
   font-weight: initial;
-  font-size: 24px;
+  font-size: 20px;
   margin: 0px;
-  margin-bottom: 16px;
+  margin-bottom: 8px;
 }
 
 .selected {
@@ -171,9 +175,6 @@
   #popup {
     top: 54px;
   }
-  .popup-header {
-    margin: 56px;
-  }
   .popup-scroll::after {
     height: 70px;
   }
@@ -190,7 +191,7 @@
   }
   
   .popup-header-title {
-    font-size: 58px;
+    font-size: 32px;
     max-width: 500px;
   }
 

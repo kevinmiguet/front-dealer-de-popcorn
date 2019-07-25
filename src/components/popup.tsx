@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { Movie, Schedule } from './types';
-import { getSchedulesByDistance, getCinema, getCurrentDay} from '../logique/getters';
+import { getSchedulesByDistance, getCinema, getCurrentDay, dayNumbers} from '../logique/getters';
 import { CloseIcon, DistanceIcon } from './icons';
 import { number } from 'prop-types';
 
 
-const days = ['mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche', 'lundi', 'mardi'];
+const days = ['Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche', 'Lundi', 'Mardi'];
 export const currentDay = getCurrentDay();
 
 const distanceToString = (d: number) : string => {
@@ -61,20 +61,20 @@ export class Popup extends React.Component<{ movie: Movie, isPopupOpened: boolea
         )
     };
 }
-// exported for testing
-export const ScheduleComponent: React.FunctionComponent<{ schedule: Schedule, daySelected: number }> = (props) => {
-    const selectedDaySchedules = props.schedule.week[days[props.daySelected]]
-    const cine = getCinema(props.schedule.cineId)
+const ScheduleComponent: React.FunctionComponent<{ schedule: Schedule, daySelected: number }> = (props) => {
+    const selectedDaySchedules = props.schedule.week[days[props.daySelected].toLowerCase()]
+    const cineId = props.schedule.cineId
+    const cinema = getCinema(cineId);
     if (selectedDaySchedules) {
         return (
             <div className='popup-element'>
                 <div className='popup-element-title-row'>
-                    <div className='popup-element-title'>{cine ? cine.name : props.schedule.cineId}</div>
+                    <div className='popup-element-title'>{cinema ? cinema.name : props.schedule.cineId}</div>
                     { 
-                        cine && cine.distance &&
+                        cinema && cinema.distance &&
                         <div className='popup-element-distance-row'>
                             <DistanceIcon/>
-                            <div className='popup-element-distance'>{distanceToString(cine.distance)}</div>
+                            <div className='popup-element-distance'>{distanceToString(cinema.distance)}</div>
                         </div>
                     }
                 </div>
@@ -104,7 +104,14 @@ export const DayButtons: React.FunctionComponent<{ daySelected: number, movieId:
         {days.map((day, i) => {
             let dayClass = i < currentDay ? 'popup-days-day past-day' : 'popup-days-day'
             return (
-                <a key={i} className={props.daySelected === i ? `selected ${dayClass}` : dayClass} href={`#/movie/${props.movieId}/day/${i}`}>{day}</a>
+                <a 
+                    key={i} 
+                    className={props.daySelected === i ? `selected ${dayClass}` : dayClass} 
+                    href={`#/movie/${props.movieId}/day/${i}`}
+                >
+                    <div className='day-name'>{day}</div> 
+                    <div className='day-number'>{dayNumbers[i]}</div>
+                </a>
             )
         })}
     </ul>
