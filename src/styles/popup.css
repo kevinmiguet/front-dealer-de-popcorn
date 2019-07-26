@@ -1,5 +1,6 @@
 
 #popup {
+  overflow-y: scroll;
   z-index: 3;
   background-color: rgb(9, 21, 66);
   width: 100%;
@@ -51,7 +52,7 @@
   font-size: 16px;
 }
 
-.popup-days{
+#popup-days{
   display: flex;
   padding-inline-start: unset;
   overflow-x: scroll;
@@ -82,11 +83,8 @@
   color: #353a54;
 }
 
-.popup-scroll {
-  overflow-y: auto;
-}
-.popup-scroll::after {
-  height: 21px;
+.popup-schedules::after {
+  height: 150px;
   content: "";
   display: flex;
 }
@@ -171,18 +169,26 @@
   margin-left: 8px;
 }
 
+.trailer-container {
+  display: none;
+}
+.trailer-container.shown{
+  display: inline;
+  position: fixed;
+}
+
 @media (min-width:961px)  { 
   #popup {
     top: 54px;
   }
-  .popup-scroll::after {
+  .popup-schedules::after {
     height: 70px;
   }
   .popup-days-day {
     min-width: unset;
     width: 100%;
   }
-  .popup-days{
+  #popup-days{
     overflow-x: unset;
   }
   .popup-header-right {
