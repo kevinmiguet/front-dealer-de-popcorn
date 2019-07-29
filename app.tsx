@@ -4,7 +4,7 @@ import { Cluster, ClusterGroupTitle, ClusterGroupTitles } from './components/typ
 import { Content } from './components/content';
 import { Popup, currentDay } from './components/popup';
 import { NavigationBar } from './components/navigation-bar';
-import { isLegitMovieId, getClusterGroup, getMovie, movies, clusterGroups, getCinemasCloseTo } from './logique/getters';
+import { isLegitMovieId, getClusterGroup, getMovie, movies, clusterGroups, initIndexedCineWithDistanceDictionary } from './logique/getters';
 import { SearchBar } from './components/search-bar';
 import { getCurrentPositionAsync } from './logique/utils'
 
@@ -93,23 +93,13 @@ class App extends React.Component<{}, AppState> {
     this.setState(newState);
   }
 
-  componentWillMount() {
+  async componentWillMount() {
     // Handle the initial route
     this.navigated();
     // Handle browser navigation events
     window.addEventListener('hashchange', this.navigated, false);
-  }
-
-
-
-  async aroundMeClicked() {
-    try {
-      // get position
-      const position = await getCurrentPositionAsync()
-      // filter cinemas by distance
-      const cinemas = getCinemasCloseTo(position)
-      // todo apply cinemas filter to movie list
-    } catch(err) {}
+    // initialize cinema list with distances from current position
+    await initIndexedCineWithDistanceDictionary()
   }
 
   render() {

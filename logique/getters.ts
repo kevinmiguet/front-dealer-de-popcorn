@@ -1,7 +1,7 @@
 import { Schedule, Cinema, Movie, ClusterGroups } from '../components/types';
-import { distance } from './utils'
-export const cinemas: { [id: string]: Cinema } = require('../export/cinemas.json');
-export const schedules: { [id: string]: Schedule } = require('../export/schedules.json');
+import { evaluateDistance, getCurrentPositionAsync } from './utils'
+const rawCinemas: { [id: string]: Cinema } = require('../export/cinemas.json');
+const schedules: { [id: string]: Schedule } = require('../export/schedules.json');
 export const movies: { [id: string]: Movie } = require('../export/movies.json');
 export const clusterGroups: ClusterGroups = require('../export/clusters.json');
 
@@ -21,11 +21,44 @@ const indexedScheduleIds: IndexedScheduleIds = scheduleIds.reduce((_indexedSched
     if (!_indexedScheduleIds[schedule.movieId]) {
         _indexedScheduleIds[schedule.movieId] = [];
     }
+    console.log('adding cine ' + schedule.cineId)
     _indexedScheduleIds[schedule.cineId].push(scheduleId);
     _indexedScheduleIds[schedule.movieId].push(scheduleId);
     return _indexedScheduleIds;
 }, {});
 
+//
+// Cinemas
+//
+// Add distance from current position to each cinema
+
+export interface FrontendCinema extends Cinema{
+    distance: number
+}
+interface FrontendCineDictionary {
+    [id: string]: FrontendCinema
+}
+
+const cinemaIds = Object.keys(rawCinemas)
+let indexedCineWithDistanceDictionary: FrontendCineDictionary = null
+export async function initIndexedCineWithDistanceDictionary() {
+    indexedCineWithDistanceDictionary = {}
+    const currentPosition = await getCurrentPositionAsync()
+    cinemaIds.map((cineId: string) => {
+        const cine = rawCinemas[cineId]
+        indexedCineWithDistanceDictionary[cineId] = {} as FrontendCinema
+        Object.assign(indexedCineWithDistanceDictionary[cineId], cine)
+        try {
+            const d = evaluateDistance(cine.pos.lat, 
+                cine.pos.lng, 
+                currentPosition.coords.latitude,
+                currentPosition.coords.longitude)
+            indexedCineWithDistanceDictionary[cineId].distance = d
+        } catch (err) {
+            console.error('error in initIndexedCineWithDistanceDictionary: ', err)
+        }
+    })
+}
 
 // takes a cinema or movie Id and returns their schedules
 export function getSchedules(id: string): Schedule[] {
@@ -34,7 +67,12 @@ export function getSchedules(id: string): Schedule[] {
 
 // takes a cinema or movie Id and returns their schedules
 export function getSchedulesByDistance(id: string): Schedule[] {
-    return indexedScheduleIds[id].map(scId => schedules[scId])
+    const s = indexedScheduleIds[id].map(scId => schedules[scId]).sort((s1, s2) => {
+        const cine1 = indexedCineWithDistanceDictionary[s1.cineId]
+        const cine2 = indexedCineWithDistanceDictionary[s2.cineId]
+        return cine1.distance - cine2.distance
+    })
+    return s
 }
 
 //
@@ -42,7 +80,8 @@ export function getSchedulesByDistance(id: string): Schedule[] {
 //
 
 export function getCinema(id: string) {
-    return cinemas[id];
+    const cine = indexedCineWithDistanceDictionary[id]
+    return cine
 }
 
 //
@@ -77,24 +116,4 @@ export function getCurrentDay(): number {
     };
     const normalPeopleCurrentDay =  new Date().getDay();
     return normalPeopleWeekToCinemaWeek[normalPeopleCurrentDay];
-}
-
-// Geolocalized cinemas
-export function getCinemasCloseTo(position: Position) {
-    let cinemasAround: Cinema[] = []
-    for(let id in cinemas) {
-        const cine = cinemas[id]
-        // calculate distance
-        const d = distance(position.coords.latitude, 
-            position.coords.longitude, 
-            cine.pos.lat, 
-            cine.pos.lng)
-        
-        // get cinemas closer then 2 km
-        if (d < 2000) {
-            cinemasAround.push(cine)
-            console.log('close cinema: ' + cine.name + ', distance ' + d)
-        }
-    }
-    return cinemasAround
 }

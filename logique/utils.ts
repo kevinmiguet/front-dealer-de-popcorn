@@ -2,13 +2,37 @@ export function scrollTop() {
 	document.getElementsByTagName('html')[0].scrollIntoView(true)
 }
 
-export function getPositionAsync(): Promise<Position> {
-	return new Promise(function (resolve, reject) {
-		navigator.geolocation.getCurrentPosition(resolve, reject);
-	});
+// distance
+let currentPosition: Position = null
+export async function getCurrentPositionAsync(): Promise<Position> {
+	if (currentPosition === null) {
+		console.log('getting current position')
+		try {
+			currentPosition = {
+				coords: {
+					accuracy: 1,
+					altitude: 1,
+					altitudeAccuracy: 1,
+					heading: 1,
+					speed: 1,
+					latitude: 48.85741,
+					longitude: 2.35756
+				},
+				timestamp: 0
+			}
+			// await new Promise(function (resolve, reject) {
+			// 	navigator.geolocation.getCurrentPosition(resolve, reject);
+			// })
+		} catch (err) {
+			console.error('error in getCurrentPositionAsync: ' + err)
+		}
+	} 
+	
+	return currentPosition
 }
 
-export function distance(lat1: number, lon1: number, lat2: number, lon2: number) : number {
+// evaluate distance in meters
+export function evaluateDistance(lat1: number, lon1: number, lat2: number, lon2: number) : number {
 	if ((lat1 == lat2) && (lon1 == lon2)) {
 		return 0;
 	}
