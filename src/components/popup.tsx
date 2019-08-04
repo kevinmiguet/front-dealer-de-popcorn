@@ -3,6 +3,7 @@ import { Movie, Schedule } from './types';
 import { getSchedulesByDistance, getCinema, getCurrentDay, dayNumbers} from '../logique/getters';
 import { CloseIcon, DistanceIcon } from './icons';
 import { number } from 'prop-types';
+import { scrollTo } from '../logique/utils';
 
 
 const days = ['Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche', 'Lundi', 'Mardi'];
@@ -105,6 +106,7 @@ const ScheduleComponent: React.FunctionComponent<{ schedule: Schedule, daySelect
 }
 
 <<<<<<< HEAD:src/components/popup.tsx
+<<<<<<< HEAD:src/components/popup.tsx
 // exported for testing
 export const DayButtons: React.FunctionComponent<{ daySelected: number, movieId: string }> = (props) => (
     <ul className='popup-days'>
@@ -149,3 +151,22 @@ export const PopupHeader: React.FunctionComponent<{ movie: Movie, getDefaultUrl:
         <a id='icon-close' href={props.getDefaultUrl()}><CloseIcon /></a>
     </div>
 )
+=======
+export const TrailerContainer: React.FunctionComponent<{ isTrailerContainerVisible: boolean, trailerId: string}> = (props) => {
+    if (props.isTrailerContainerVisible && props.trailerId) {
+        return (
+        <div className={`trailer-container ${props.isTrailerContainerVisible ? 'visible' : ''}`}>
+        <iframe
+            width="560"
+            height="315"
+            src={`https://www.youtube.com/embed/${props.trailerId}`}
+            frameBorder={0}
+            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+        >
+        </iframe >
+    </div>)
+    } return null;
+    
+}
+>>>>>>> 0876a8b... feat(popup): add watch trailer function:components/popup.tsx

@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { Cluster, ClusterGroupTitle, ClusterGroupTitles } from './components/types';
 import { Content } from './components/content';
-import { Popup, currentDay } from './components/popup';
+import { Popup, currentDay, TrailerContainer } from './components/popup';
 import { NavigationBar } from './components/navigation-bar';
 import { isLegitMovieId, getClusterGroup, getMovie, movies, clusterGroups } from './logique/getters';
 
@@ -11,6 +11,7 @@ function getStateFromHash(hash: string): AppState {
   let newState: AppState = {};
   let i = 1; // first one is always #
   newState.isPopupOpened = false; // popup is closed by default
+  newState.isTrailerContainerVisible = false; // trailer container is hidden by default
   while (i < args.length) {
     let arg = args[i];
     let argValue = args[i + 1]
@@ -45,22 +46,27 @@ function getStateFromHash(hash: string): AppState {
       i += 2;
       continue;
     }
+    else if (arg === 'isTrailerContainerVisible') {
+      newState.isTrailerContainerVisible = true;
+    }
     i++;
   }
   return newState
 }
 
 export interface AppState {
-  movieId?: string,
-  isPopupOpened?: boolean
-  clusters?: Cluster[],
+  movieId?: string;
+  isPopupOpened?: boolean;
+  isTrailerContainerVisible?: boolean;
+  clusters?: Cluster[];
   daySelected?: number;
-  clusterSelected?: ClusterGroupTitle
+  clusterSelected?: ClusterGroupTitle;
 }
 
 class App extends React.Component<{}, AppState> {
   state: AppState = {
     isPopupOpened: false,
+    isTrailerContainerVisible: false,
     movieId: Object.keys(movies)[0],
     clusters: clusterGroups.recent,
     daySelected: currentDay,
@@ -102,8 +108,9 @@ class App extends React.Component<{}, AppState> {
     return (
       <div>
         <Popup movie={getMovie(this.state.movieId)} isPopupOpened={this.state.isPopupOpened} daySelected={this.state.daySelected} getDefaultUrl={this.getDefaultUrl} />
-        <Content clusters={this.state.clusters} isPopupOpened={this.state.isPopupOpened} getDefaultUrl={this.getDefaultUrl} />
+        <Content clusters={this.state.clusters} isPopupOpened={this.state.isPopupOpened} isTrailerContainerVisible={this.state.isTrailerContainerVisible} getDefaultUrl={this.getDefaultUrl} />
         <NavigationBar clusterSelected={this.state.clusterSelected} setClusters={this.setClusters} setDefaultCluster={this.setBackCurrentMovieCluster} />
+        <TrailerContainer isTrailerContainerVisible={this.state.isTrailerContainerVisible} trailerId={getMovie(this.state.movieId).trailerId}/>
       </div>
     );
   }

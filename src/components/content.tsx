@@ -4,18 +4,21 @@ import { MovieCard } from './movie-card';
 import { getMovie } from '../logique/getters';
 import { scrollTop } from '../logique/utils';
 
-export class Content extends React.Component<{ clusters: Cluster[], isPopupOpened: boolean, getDefaultUrl: Function }> {
+export class Content extends React.Component<{ clusters: Cluster[], isPopupOpened: boolean, isTrailerContainerVisible: boolean, getDefaultUrl: Function }> {
     componentWillReceiveProps(newProps) {
         if (newProps.clusters.length !== this.props.clusters.length || newProps.clusters[0].title !== this.props.clusters[0].title) {
             scrollTop();
         }
     }
-
+   
     render() {
         return (
             <div id="content">
-                <a id="dark-layer-container" href={this.props.getDefaultUrl()}>
-                    <div id="dark-layer" className={this.props.isPopupOpened ? 'visible' : 'invisible'}></div>
+                <a id="popup-dark-layer-container" href={this.props.getDefaultUrl()}>
+                    <div id="popup-dark-layer" className={this.props.isPopupOpened ? 'visible' : ''}></div>
+                </a>
+                <a id="trailer-dark-layer-container" href={window.location.href.replace('/isTrailerContainerVisible/true', '')}>
+                    <div id="trailer-dark-layer" className={this.props.isTrailerContainerVisible ? 'visible' : ''}></div>
                 </a>
                 <div className="movie-list" >
                     {this.props.clusters.map(
