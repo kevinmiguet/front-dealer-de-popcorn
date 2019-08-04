@@ -14,7 +14,7 @@ const distanceToString = (d: number) : string => {
     return (d / 1000).toFixed(1) + ' km'
 }
 
-export class Popup extends React.Component<{ movie: Movie, isPopupOpened: boolean, daySelected: number, getDefaultUrl: Function }, { popupHeight: number }> {
+export class Popup extends React.Component<{ movie: Movie, isPopupOpened: boolean, daySelected: number, getDefaultUrl: Function }, { popupContentHeight: number, cinemasByDistance: any[] }> {
     constructor(props) {
         super(props);
         this.state = {
@@ -44,11 +44,11 @@ export class Popup extends React.Component<{ movie: Movie, isPopupOpened: boolea
     }
 
     updateWindowDimensions() {
-        this.setState({ popupHeight: window.innerHeight - 54 });
+        this.setState({ popupContentHeight: window.innerHeight - 54 });
     }
 
     render() {
-        const popupStyle = { height: this.state.popupHeight };
+        const popupStyle = { height: this.state.popupContentHeight };
         return (
             <div id='popup' key={'${schedule.movieId}-${schedule.cineId}'} className={this.props.isPopupOpened ? 'popup-open' : 'popup-close'}>
                 <div className='popup-fixed'>
@@ -56,8 +56,8 @@ export class Popup extends React.Component<{ movie: Movie, isPopupOpened: boolea
                     <DayButtons daySelected={this.props.daySelected} movieId={this.props.movie.id} />
                 </div>
                 <div className='popup-schedules'>
-                    {getSchedules(this.props.movie.id).map(schedule => (
-                        <Schedule
+                    {getSchedulesByDistance(this.props.movie.id) && getSchedulesByDistance(this.props.movie.id).map(schedule => (
+                        <ScheduleComponent
                             key={`${schedule.movieId}-${schedule.cineId}`}
                             schedule={schedule}
                             daySelected={this.props.daySelected}
@@ -105,15 +105,9 @@ const ScheduleComponent: React.FunctionComponent<{ schedule: Schedule, daySelect
     return null
 }
 
-<<<<<<< HEAD:src/components/popup.tsx
-<<<<<<< HEAD:src/components/popup.tsx
 // exported for testing
-export const DayButtons: React.FunctionComponent<{ daySelected: number, movieId: string }> = (props) => (
-    <ul className='popup-days'>
-=======
 const DayButtons: React.FunctionComponent<{ daySelected: number, movieId: string }> = (props) => (
     <ul id='popup-days'>
->>>>>>> 1045095... feat(popup): scroll up when opening popup:components/popup.tsx
         {days.map((day, i) => {
             let dayClass = i < currentDay ? 'popup-days-day past-day' : 'popup-days-day'
             return (
@@ -151,7 +145,6 @@ export const PopupHeader: React.FunctionComponent<{ movie: Movie, getDefaultUrl:
         <a id='icon-close' href={props.getDefaultUrl()}><CloseIcon /></a>
     </div>
 )
-=======
 export const TrailerContainer: React.FunctionComponent<{ isTrailerContainerVisible: boolean, trailerId: string}> = (props) => {
     if (props.isTrailerContainerVisible && props.trailerId) {
         return (
@@ -169,4 +162,3 @@ export const TrailerContainer: React.FunctionComponent<{ isTrailerContainerVisib
     } return null;
     
 }
->>>>>>> 0876a8b... feat(popup): add watch trailer function:components/popup.tsx
