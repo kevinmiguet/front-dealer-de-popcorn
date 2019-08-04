@@ -6,23 +6,10 @@ export function scrollTop() {
 let currentPosition: Position = null
 export async function getCurrentPositionAsync(): Promise<Position> {
 	if (currentPosition === null) {
-		console.log('getting current position')
 		try {
-			currentPosition = {
-				coords: {
-					accuracy: 1,
-					altitude: 1,
-					altitudeAccuracy: 1,
-					heading: 1,
-					speed: 1,
-					latitude: 48.85741,
-					longitude: 2.35756
-				},
-				timestamp: 0
-			}
-			// await new Promise(function (resolve, reject) {
-			// 	navigator.geolocation.getCurrentPosition(resolve, reject);
-			// })
+			currentPosition = await new Promise(function (resolve, reject) {
+				navigator.geolocation.getCurrentPosition(resolve, reject);
+			})
 		} catch (err) {
 			console.error('error in getCurrentPositionAsync: ' + err)
 		}
