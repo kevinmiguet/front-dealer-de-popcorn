@@ -21,7 +21,6 @@ const indexedScheduleIds: IndexedScheduleIds = scheduleIds.reduce((_indexedSched
     if (!_indexedScheduleIds[schedule.movieId]) {
         _indexedScheduleIds[schedule.movieId] = [];
     }
-    console.log('adding cine ' + schedule.cineId)
     _indexedScheduleIds[schedule.cineId].push(scheduleId);
     _indexedScheduleIds[schedule.movieId].push(scheduleId);
     return _indexedScheduleIds;
