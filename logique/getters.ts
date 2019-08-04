@@ -35,25 +35,25 @@ const indexedScheduleIds: IndexedScheduleIds = scheduleIds.reduce((_indexedSched
 export interface FrontendCinema extends Cinema{
     distance: number
 }
-interface FrontendCineDictionary {
+interface IndexedFrontendCinemas {
     [id: string]: FrontendCinema
 }
 
 const cinemaIds = Object.keys(rawCinemas)
-let indexedCineWithDistanceDictionary: FrontendCineDictionary = null
+let indexedFrontendCinemas: IndexedFrontendCinemas = null
 export async function initIndexedCineWithDistanceDictionary() {
-    indexedCineWithDistanceDictionary = {}
+    indexedFrontendCinemas = {}
     const currentPosition = await getCurrentPositionAsync()
     cinemaIds.map((cineId: string) => {
         const cine = rawCinemas[cineId]
-        indexedCineWithDistanceDictionary[cineId] = {} as FrontendCinema
-        Object.assign(indexedCineWithDistanceDictionary[cineId], cine)
+        indexedFrontendCinemas[cineId] = {} as FrontendCinema
+        Object.assign(indexedFrontendCinemas[cineId], cine)
         try {
             const d = evaluateDistance(cine.pos.lat, 
                 cine.pos.lng, 
                 currentPosition.coords.latitude,
                 currentPosition.coords.longitude)
-            indexedCineWithDistanceDictionary[cineId].distance = d
+                indexedFrontendCinemas[cineId].distance = d
         } catch (err) {
             console.error('error in initIndexedCineWithDistanceDictionary: ', err)
         }
@@ -80,7 +80,7 @@ export function getSchedulesByDistance(id: string): Schedule[] {
 //
 
 export function getCinema(id: string) {
-    const cine = indexedCineWithDistanceDictionary[id]
+    const cine = indexedFrontendCinemas[id]
     return cine
 }
 
