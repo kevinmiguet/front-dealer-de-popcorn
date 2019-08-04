@@ -67,8 +67,9 @@ export function getSchedules(id: string): Schedule[] {
 // takes a cinema or movie Id and returns their schedules
 export function getSchedulesByDistance(id: string): Schedule[] {
     const s = indexedScheduleIds[id].map(scId => schedules[scId]).sort((s1, s2) => {
-        const cine1 = indexedCineWithDistanceDictionary[s1.cineId]
-        const cine2 = indexedCineWithDistanceDictionary[s2.cineId]
+        const cine1 = indexedFrontendCinemas[s1.cineId]
+        const cine2 = indexedFrontendCinemas[s2.cineId]
+        if (!cine1 || !cine2) return 0
         return cine1.distance - cine2.distance
     })
     return s
