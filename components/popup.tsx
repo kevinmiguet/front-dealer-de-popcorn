@@ -82,13 +82,13 @@ const Schedule: React.FunctionComponent<{ schedule: Schedule, daySelected: numbe
                     <div className='version'> VO </div>
                 )}
                 {selectedDaySchedules.VO && selectedDaySchedules.VO.map(daySchedule => (
-                    <div className='popup-element-bubble'>{daySchedule}</div>
+                    <div key={daySchedule} className='popup-element-bubble'>{daySchedule}</div>
                 ))}
                  {selectedDaySchedules.VF && (
                     <div className='version'> VF </div>
                 )}
                 {selectedDaySchedules.VF && selectedDaySchedules.VF.map(daySchedule => (
-                    <div className='popup-element-bubble'>{daySchedule}</div>
+                    <div key={daySchedule} className='popup-element-bubble'>{daySchedule}</div>
                 ))}
             </div>
         )
