@@ -2,7 +2,7 @@ export function scrollTop() {
 	document.getElementsByTagName('html')[0].scrollIntoView(true)
 }
 
-// distance
+// geolocation
 let currentPosition: Position = null
 export async function getCurrentPositionAsync(): Promise<Position> {
 	if (currentPosition === null) {
@@ -16,6 +16,12 @@ export async function getCurrentPositionAsync(): Promise<Position> {
 	} 
 	
 	return currentPosition
+}
+
+export async function watchCurrentPosition(callback: PositionCallback) {
+	if (navigator.geolocation) {
+		navigator.geolocation.watchPosition(callback)
+	}
 }
 
 // evaluate distance in meters

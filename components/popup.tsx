@@ -70,7 +70,7 @@ const Schedule: React.FunctionComponent<{ schedule: Schedule, daySelected: numbe
                 <div className='popup-element-title-row'>
                     <div className='popup-element-title'>{cine ? cine.name : props.schedule.cineId}</div>
                     { 
-                        cine &&
+                        cine && cine.distance &&
                         <div className='popup-element-distance-row'>
                             <DistanceIcon/>
                             <div className='popup-element-distance'>{distanceToString(cine.distance)}</div>

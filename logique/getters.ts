@@ -1,5 +1,5 @@
 import { Schedule, Cinema, Movie, ClusterGroups } from '../components/types';
-import { evaluateDistance, getCurrentPositionAsync } from './utils'
+import { evaluateDistance, watchCurrentPosition } from './utils'
 const rawCinemas: { [id: string]: Cinema } = require('../export/cinemas.json');
 const schedules: { [id: string]: Schedule } = require('../export/schedules.json');
 export const movies: { [id: string]: Movie } = require('../export/movies.json');
@@ -40,24 +40,29 @@ interface IndexedFrontendCinemas {
 
 const cinemaIds = Object.keys(rawCinemas)
 let indexedFrontendCinemas: IndexedFrontendCinemas = null
-export async function initIndexedCineWithDistanceDictionary() {
+function initIndexedCineWithDistanceDictionary() {
     indexedFrontendCinemas = {}
-    const currentPosition = await getCurrentPositionAsync()
     cinemaIds.map((cineId: string) => {
         const cine = rawCinemas[cineId]
         indexedFrontendCinemas[cineId] = {} as FrontendCinema
         Object.assign(indexedFrontendCinemas[cineId], cine)
-        try {
-            const d = evaluateDistance(cine.pos.lat, 
-                cine.pos.lng, 
-                currentPosition.coords.latitude,
-                currentPosition.coords.longitude)
+    })
+    watchCurrentPosition((position) => {
+        cinemaIds.map((cineId: string) => {
+            const cine = rawCinemas[cineId]
+            try {
+                const d = evaluateDistance(cine.pos.lat, 
+                    cine.pos.lng, 
+                    position.coords.latitude,
+                    position.coords.longitude)
                 indexedFrontendCinemas[cineId].distance = d
-        } catch (err) {
-            console.error('error in initIndexedCineWithDistanceDictionary: ', err)
-        }
+            } catch (err) {
+                console.error('error while updating distance: ', err)
+            }
+        })
     })
 }
+initIndexedCineWithDistanceDictionary()
 
 // takes a cinema or movie Id and returns their schedules
 export function getSchedules(id: string): Schedule[] {

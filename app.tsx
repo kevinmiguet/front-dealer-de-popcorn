@@ -98,8 +98,6 @@ class App extends React.Component<{}, AppState> {
     this.navigated();
     // Handle browser navigation events
     window.addEventListener('hashchange', this.navigated, false);
-    // initialize cinema list with distances from current position
-    await initIndexedCineWithDistanceDictionary()
   }
 
   render() {
