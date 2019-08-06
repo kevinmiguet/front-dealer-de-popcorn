@@ -4,9 +4,7 @@ import { Cluster, ClusterGroupTitle, ClusterGroupTitles } from './components/typ
 import { Content } from './components/content';
 import { Popup, currentDay } from './components/popup';
 import { NavigationBar } from './components/navigation-bar';
-import { isLegitMovieId, getClusterGroup, getMovie, movies, clusterGroups, initIndexedCineWithDistanceDictionary } from './logique/getters';
-import { SearchBar } from './components/search-bar';
-import { getCurrentPositionAsync } from './logique/utils'
+import { isLegitMovieId, getClusterGroup, getMovie, movies, clusterGroups } from './logique/getters';
 
 function getStateFromHash(hash: string): AppState {
   const args = hash.split('/');
