@@ -15,6 +15,7 @@ export class NavigationBar extends React.Component<NavigationBarProps> {
                     <li><a className={`navigation-button ${this.props.clusterSelected === 'recent' ? 'selected' : ''}`} href="#/cluster/recent"> Films Récents</a></li>
                     <li><a className={`navigation-button ${this.props.clusterSelected === 'retro' ? 'selected' : ''}`} href="#/cluster/retro"> Retrospectives</a></li>
                     <li><a className={`navigation-button ${this.props.clusterSelected === 'old' ? 'selected' : ''}`} href="#/cluster/old"> Vieux Films</a></li>
+                    <button className='aroundMeButton'>Around me</button>
                 </ul>
                 <div className='navigation-bar-right'>
                     <SearchBar setClusters={this.props.setClusters} setDefaultCluster={this.props.setDefaultCluster}></SearchBar>
