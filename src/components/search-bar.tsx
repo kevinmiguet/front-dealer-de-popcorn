@@ -1,14 +1,13 @@
 import * as React from 'react';
 import { SearchIcon } from './icons';
 import { SetStateAndUpdateHashFn } from './types';
-import { getSearchResult } from '../logique/search';
+import { getSearchQueryClusters } from '../logique/search';
 import { AppState } from '../app';
 
 export class SearchBar extends React.Component<{ setStateAndUpdateHash: SetStateAndUpdateHashFn}> {
     search = (_value: string) => {
-        const value = _value.trim()
-        let newState: AppState = {searchQuery: value}
-        this.props.setStateAndUpdateHash(newState);
+        const searchQuery = _value.trim()
+        this.props.setStateAndUpdateHash({searchQuery});
     }
     state = {
         focused: false

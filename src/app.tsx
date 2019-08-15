@@ -1,11 +1,11 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { Cluster, ClusterGroupTitle, ClusterGroupTitles } from './components/types';
+import { ClusterGroupTitle, ClusterGroupTitles } from './components/types';
 import { Content } from './components/content';
 import { Popup, currentDay, TrailerContainer } from './components/popup';
 import { NavigationBar } from './components/navigation-bar';
 import { isLegitMovieId, getClusterGroup, getMovie, clusterGroups } from './logique/getters';
-import { getSearchResult } from './logique/search';
+import { getSearchQueryClusters } from './logique/search';
 
 function getHashFromState(state: AppState): string {
   const hash = Object.keys(state)
@@ -23,7 +23,7 @@ function getStateFromHash(hash: string): AppState {
   newState.showTrailer = false; // trailer container is hidden by default
   while (i < args.length) {
     let arg = args[i];
-    let argValue = args[i + 1]
+    let argValue = decodeURIComponent(args[i + 1]);
 
     if (arg === 'movieId') {
       let movieId = argValue;;
@@ -49,7 +49,6 @@ function getStateFromHash(hash: string): AppState {
       // set 'recent' if argValue is not a ClusterGroupTitle
       const isClusterGroupTitle = ClusterGroupTitles.indexOf(argValue as any) >= 0;
       let clusterName: any = isClusterGroupTitle ? argValue : 'recent';
-      newState.clusters = getClusterGroup(clusterName);
       newState.cluster = clusterName;
       i += 2;
       continue;
@@ -66,7 +65,12 @@ function getStateFromHash(hash: string): AppState {
     }
     else if (arg === 'searchQuery') {
       newState.searchQuery = argValue;
-      newState.clusters = getSearchResult(argValue);
+      // this can happen if the search query was cleaned by another button
+      // or if the user just landed on the page with a search query in url
+      const searchField: any = document.getElementById('search-bar-input');
+      if (searchField && !argValue) {
+        searchField.value = '';
+      }
       i += 2;
       continue;
     }
@@ -79,7 +83,6 @@ export interface AppState {
   movieId?: string;
   showPopup?: boolean;
   showTrailer?: boolean;
-  clusters?: Cluster[];
   day?: number;
   cluster?: ClusterGroupTitle;
   searchQuery?: string;
@@ -90,15 +93,13 @@ class App extends React.Component<{}, AppState> {
     showPopup: false,
     showTrailer: false,
     movieId: null,
-    clusters: clusterGroups.recent,
     day: currentDay,
     cluster: 'recent',
   };
   
   setStateAndUpdateHash = (updatedState: AppState) => {
     this.setState(
-      {...updatedState, 
-        searchQuery: updatedState.searchQuery || null}, 
+      {...updatedState}, 
       () => window.location.hash = getHashFromState(this.state)
     )
   }
@@ -126,7 +127,9 @@ class App extends React.Component<{}, AppState> {
         />
 
         <Content 
-          clusters={this.state.clusters}
+          clusters={this.state.searchQuery ? 
+            getSearchQueryClusters(this.state.searchQuery) :
+            clusterGroups[this.state.cluster] }
           showPopup={this.state.showPopup}
           showTrailer={this.state.showTrailer}
           setStateAndUpdateHash={this.setStateAndUpdateHash} 

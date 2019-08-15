@@ -5,7 +5,7 @@ const tags = [
 
 // écrire des test unitaires pour cette fonction
 // et trafiquer dans tous les sens le code pour obtenir un truc cool
-function getSearchResult(string) {
+function getSearchQueryClusters(string) {
     return tags.filter(tag => areStringSimilar(string, tag))
 }
 function boringify(string) {
@@ -49,4 +49,4 @@ function distanceEdition(search, tag) {
 
 
 const searchBar = document.getElementById('search-bar-input');
-searchBar.onkeyup = () => console.log(getSearchResult(searchBar.value));
+searchBar.onkeyup = () => console.log(getSearchQueryClusters(searchBar.value));

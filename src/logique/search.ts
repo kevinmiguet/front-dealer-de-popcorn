@@ -18,7 +18,7 @@ qu'est-ce que les gens tapent dans un moteur de recherch de films ?
 I
 */
 
-export function getSearchResult(search: string): Cluster[] {
+export function getSearchQueryClusters(search: string): Cluster[] {
     let result: Cluster[] = [];
     // cluster with all movies containing keyword
     result.push(getMoviesMatchingSearch(search))
