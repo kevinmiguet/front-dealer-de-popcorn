@@ -24,7 +24,8 @@ export function getSearchResult(search: string): Cluster[] {
     result.push(getMoviesMatchingSearch(search))
     result = result.concat(getClustersMatchingSearch(search));
     result.push(getDirectorsMatchingSearch(search))
-    return result;
+    const cleanResult = result.filter(cluster => cluster.movieIds.length > 0);
+    return cleanResult.length > 0 ? cleanResult : [{movieIds: [], title: 'Désolé, aucun résultat'}]
 }
 
 function getMoviesMatchingSearch(str: string): Cluster {

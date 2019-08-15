@@ -31,12 +31,15 @@ class Test extends React.Component<{}, TestState> {
     return (
       <div id='container-test'>
         <nav id='menu-test'>
-          {this.components.map(component => (
-              <button 
+          {this.components
+            .map(component => 
+            <button 
                 className={this.state.component === component ? 'selected' : ''}
                 onClick={() => this.setComponent(component)}
-              >{component}</button>
-          ))}
+            >
+            {component} 
+            </button>
+          )}
         </nav>
         <div id='content-test'>
           {this.state.component === 'MovieCard' && <MovieCard movie={movie}></MovieCard>}
