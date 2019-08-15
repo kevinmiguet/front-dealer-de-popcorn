@@ -91,12 +91,13 @@ class App extends React.Component<{}, AppState> {
     this.setState(newState);
   }
 
-  componentWillMount() {
+  async componentWillMount() {
     // Handle the initial route
     this.navigated();
     // Handle browser navigation events
     window.addEventListener('hashchange', this.navigated, false);
   }
+
   render() {
     return (
       <div>

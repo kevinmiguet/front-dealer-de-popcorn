@@ -1,22 +1,32 @@
 import * as React from 'react';
 import { Movie, Schedule } from './types';
-import { getSchedules, getCinema, getCurrentDay } from '../logique/getters';
-import { CloseIcon } from './icons';
+import { getSchedulesByDistance, getCinema, getCurrentDay} from '../logique/getters';
+import { CloseIcon, DistanceIcon } from './icons';
+import { number } from 'prop-types';
 
 
 const days = ['mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche', 'lundi', 'mardi'];
 export const currentDay = getCurrentDay();
-export class Popup extends React.Component<{ movie: Movie, isPopupOpened: boolean, daySelected: number, getDefaultUrl: Function }, { popupContentHeight: number }> {
+
+const distanceToString = (d: number) : string => {
+    if (d < 1000) return Math.round(d).toString() + ' m'
+    return (d / 1000).toFixed(1) + ' km'
+}
+
+export class Popup extends React.Component<{ movie: Movie, isPopupOpened: boolean, daySelected: number, getDefaultUrl: Function }, { popupContentHeight: number, cinemasByDistance: Schedule[] }> {
     constructor(props) {
         super(props);
         this.state = {
             popupContentHeight: 0,
+            cinemasByDistance: []
         };
         this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
     }
-    componentDidMount() {
+    async componentDidMount() {
         this.updateWindowDimensions();
         window.addEventListener('resize', this.updateWindowDimensions);
+        const schedule = await getSchedulesByDistance(this.props.movie.id)
+        this.setState({cinemasByDistance: schedule})
     }
 
     componentWillUnmount() {
@@ -26,22 +36,26 @@ export class Popup extends React.Component<{ movie: Movie, isPopupOpened: boolea
     updateWindowDimensions() {
         this.setState({ popupContentHeight: window.innerHeight - 288 });
     }
+
     render() {
         const popupScrollStyle = { height: this.state.popupContentHeight };
         return (
-            <div id='popup' className={this.props.isPopupOpened ? 'popup-open' : 'popup-close'}>
+            <div id='popup' key={'${schedule.movieId}-${schedule.cineId}'} className={this.props.isPopupOpened ? 'popup-open' : 'popup-close'}>
                 <div className='popup-fixed'>
                     <PopupHeader movie={this.props.movie} getDefaultUrl={this.props.getDefaultUrl} />
                     <DayButtons daySelected={this.props.daySelected} movieId={this.props.movie.id} />
                 </div>
                 <div className='popup-scroll' style={popupScrollStyle}>
-                    {getSchedules(this.props.movie.id).map(schedule => (
-                        <ScheduleComponent
-                            key={`${schedule.movieId}-${schedule.cineId}`}
-                            schedule={schedule}
-                            daySelected={this.props.daySelected}
-                        />
-                    ))}
+                    {
+                        getSchedulesByDistance(this.props.movie.id) &&
+                        getSchedulesByDistance(this.props.movie.id).map(schedule => (
+                            <ScheduleComponent
+                                key={`${schedule.movieId}-${schedule.cineId}`}
+                                schedule={schedule}
+                                daySelected={this.props.daySelected}
+                            />  
+                        ))
+                    }
                 </div>
             </div>
         )
@@ -50,32 +64,38 @@ export class Popup extends React.Component<{ movie: Movie, isPopupOpened: boolea
 // exported for testing
 export const ScheduleComponent: React.FunctionComponent<{ schedule: Schedule, daySelected: number }> = (props) => {
     const selectedDaySchedules = props.schedule.week[days[props.daySelected]]
-    const cineId = props.schedule.cineId
-    const cinema = getCinema(cineId);
+    const cine = getCinema(props.schedule.cineId)
     if (selectedDaySchedules) {
         return (
             <div className='popup-element'>
-                <div className='popup-element-title'>{cinema ? cinema.name : cineId}</div>
+                <div className='popup-element-title-row'>
+                    <div className='popup-element-title'>{cine ? cine.name : props.schedule.cineId}</div>
+                    { 
+                        cine && cine.distance &&
+                        <div className='popup-element-distance-row'>
+                            <DistanceIcon/>
+                            <div className='popup-element-distance'>{distanceToString(cine.distance)}</div>
+                        </div>
+                    }
+                </div>
                 {/* display all times for selected day */}
                 {selectedDaySchedules.VO && (
                     <div className='version'> VO </div>
                 )}
                 {selectedDaySchedules.VO && selectedDaySchedules.VO.map(daySchedule => (
-                    <div className='popup-element-bubble'>{daySchedule}</div>
+                    <div key={daySchedule} className='popup-element-bubble'>{daySchedule}</div>
                 ))}
                  {selectedDaySchedules.VF && (
                     <div className='version'> VF </div>
                 )}
                 {selectedDaySchedules.VF && selectedDaySchedules.VF.map(daySchedule => (
-                    <div className='popup-element-bubble'>{daySchedule}</div>
+                    <div key={daySchedule} className='popup-element-bubble'>{daySchedule}</div>
                 ))}
             </div>
         )
     }
-    else {
-        // react is not happy when returning nothing at all
-        return null
-    }
+    // react is not happy when returning nothing at all
+    return null
 }
 
 // exported for testing

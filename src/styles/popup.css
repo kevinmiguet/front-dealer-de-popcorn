@@ -77,12 +77,38 @@
   padding-left: 18px;
 }
 
+.popup-element-title-row {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  align-content: space-between;
+  justify-content: space-between;
+  margin-right: 20px;
+}
+
+.popup-element-distance-row {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  align-content: flex-end;
+}
+
 .popup-element-title {
   font-size: 19px;
-  width: 289px;
   margin-left: 0px;
   margin-top: 32px;
   margin-bottom: 8px;
+}
+
+.popup-element-distance {
+  font-size: 19px;
+  margin-top: 32px;
+  margin-bottom: 8px;
+  margin-left: 15px;
+}
+
+.distance-icon {
+  margin-top: 25px;
 }
 
 .popup-element-bubbles {
