@@ -4,6 +4,7 @@ const rawCinemas: { [id: string]: Cinema } = require('../../export/cinemas.json'
 const schedules: { [id: string]: Schedule } = require('../../export/schedules.json');
 export const movies: { [id: string]: Movie } = require('../../export/movies.json');
 export const clusterGroups: ClusterGroups = require('../../export/clusters.json');
+export const dayNumbers: number[] = require('../../export/dayNumbers.json');
 
 //
 // Schedules
@@ -50,6 +51,7 @@ function initIndexedCineWithDistanceDictionary() {
     watchCurrentPosition((position) => {
         cinemaIds.map((cineId: string) => {
             const cine = rawCinemas[cineId]
+            if (!cine.pos) return;
             try {
                 const d = evaluateDistance(cine.pos.lat, 
                     cine.pos.lng, 
