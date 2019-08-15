@@ -8,9 +8,6 @@ export class SearchBar extends React.Component<{ setStateAndUpdateHash: SetState
     search = (_value: string) => {
         const value = _value.trim()
         let newState: AppState = {searchQuery: value}
-        if (value) {
-            newState.clusters = getSearchResult(value)
-        }
         this.props.setStateAndUpdateHash(newState);
     }
     state = {

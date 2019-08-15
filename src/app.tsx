@@ -8,10 +8,11 @@ import { isLegitMovieId, getClusterGroup, getMovie, clusterGroups } from './logi
 import { getSearchResult } from './logique/search';
 
 function getHashFromState(state: AppState): string {
-  return Object.keys(state)
+  const hash = Object.keys(state)
     .filter(attribute => attribute !== 'clusters' && state[attribute])
     .map(attribute => `${attribute}/${state[attribute]}`)
     .join('/');
+    return `/${hash}`;
 }
 
 function getStateFromHash(hash: string): AppState {
@@ -55,14 +56,19 @@ function getStateFromHash(hash: string): AppState {
     }
     else if (arg === 'showTrailer') {
       newState.showTrailer = argValue === 'true' ? true : false;
+      i += 2;
+      continue;
     }
     else if (arg === 'showPopup') {
       newState.showPopup = argValue === 'true' ? true : false;
+      i += 2;
+      continue;
     }
-
     else if (arg === 'searchQuery') {
       newState.searchQuery = argValue;
       newState.clusters = getSearchResult(argValue);
+      i += 2;
+      continue;
     }
     i++;
   }
@@ -91,7 +97,8 @@ class App extends React.Component<{}, AppState> {
   
   setStateAndUpdateHash = (updatedState: AppState) => {
     this.setState(
-      {...updatedState}, 
+      {...updatedState, 
+        searchQuery: updatedState.searchQuery || null}, 
       () => window.location.hash = getHashFromState(this.state)
     )
   }
