@@ -139,7 +139,7 @@ export const PopupHeader: React.FunctionComponent<{ movie: Movie, setStateAndUpd
             <div className='popup-header-left'>
                 <div className='popup-header-title'> {props.movie.title}</div>
                 <div className='popup-header-director'> {props.movie.directors[0]}</div>
-                {props.movie.trailerId && <div className='popup-header-trailerbutton' onClick={() => props.setStateAndUpdateHash({showTrailer: true})}> voir la bande annonce</div>}
+                {props.movie.trailerId && <div className='stylish button popup-header-trailerbutton' onClick={() => props.setStateAndUpdateHash({showTrailer: true})}> voir la bande annonce</div>}
             </div>
             <div className='popup-header-right'>
                 <img className='movie-poster' src={`./export/posters/${props.movie.poster}`}></img>

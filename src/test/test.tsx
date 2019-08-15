@@ -4,6 +4,7 @@ import { MovieCard } from '../components/movie-card';
 import { Movie, Schedule } from '../components/types';
 import { SearchBar } from '../components/search-bar';
 import { DayButtons, ScheduleComponent, PopupHeader } from '../components/popup';
+import { FilterButton, FilterOption, FilterDropdown } from '../components/filters';
 const movie: Movie = {
   "id": '270719',
   "title": "Joel, une enfance en Patagonie",
@@ -13,17 +14,25 @@ const movie: Movie = {
 };
 const schedule: Schedule = {"cineId":"P7517","movieId":"273484","week":{"dimanche":{"VF":["11:00","16:15"],"VO":["18:45"]},"lundi":{"VF":["11:00","16:15"],"VO":["18:45"]},"mardi":{"VF":["11:00","16:15"],"VO":["18:45"]}}}
 
-type Component = 'MovieCard' | 'SearchBar' | 'DayButtons' | 'Schedules' | 'PopupHeader';
 interface TestState {
-  component: Component,
+  component: string,
 }
 
 class Test extends React.Component<{}, TestState> {
   state: TestState = {
-    component: null,
+    component: 'FilterDropdown',
   }
-  components: Component[] = ['MovieCard', 'SearchBar', 'DayButtons', 'Schedules', 'PopupHeader']
-  setComponent = (component: Component) => {
+  components: string[] = [
+    'MovieCard',
+    'SearchBar',
+    'DayButtons',
+    'Schedules',
+    'PopupHeader',
+    'FilterButton',
+    'FilterOption',
+    'FilterDropdown',
+  ]
+  setComponent = (component: string) => {
     this.setState({component});
   };
 
@@ -47,6 +56,9 @@ class Test extends React.Component<{}, TestState> {
           {this.state.component === 'DayButtons' && <DayButtons day={0} movieId={"270719"}></DayButtons>}
           {this.state.component === 'Schedules' && <ScheduleComponent schedule={schedule} day={4}></ScheduleComponent>}
           {this.state.component === 'PopupHeader' && <PopupHeader movie={movie} setStateAndUpdateHash={() => ''}></PopupHeader>}
+          {this.state.component === 'FilterButton' && <FilterButton></FilterButton>}
+          {this.state.component === 'FilterOption' && <FilterOption value='Comédie' ></FilterOption>}
+          {this.state.component === 'FilterDropdown' && <FilterDropdown title='Genre' values={['Comédie', 'Drame', 'Action', 'Thriller', 'Animation', 'Documentaire']}></FilterDropdown>}
         </div>
       </div>
     );
