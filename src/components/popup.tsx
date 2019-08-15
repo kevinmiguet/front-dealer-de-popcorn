@@ -36,7 +36,7 @@ export class Popup extends React.Component<{ movie: Movie, isPopupOpened: boolea
                 </div>
                 <div className='popup-scroll' style={popupScrollStyle}>
                     {getSchedules(this.props.movie.id).map(schedule => (
-                        <Schedule
+                        <ScheduleComponent
                             key={`${schedule.movieId}-${schedule.cineId}`}
                             schedule={schedule}
                             daySelected={this.props.daySelected}
@@ -47,7 +47,8 @@ export class Popup extends React.Component<{ movie: Movie, isPopupOpened: boolea
         )
     };
 }
-const Schedule: React.FunctionComponent<{ schedule: Schedule, daySelected: number }> = (props) => {
+// exported for testing
+export const ScheduleComponent: React.FunctionComponent<{ schedule: Schedule, daySelected: number }> = (props) => {
     const selectedDaySchedules = props.schedule.week[days[props.daySelected]]
     const cineId = props.schedule.cineId
     const cinema = getCinema(cineId);
@@ -77,7 +78,8 @@ const Schedule: React.FunctionComponent<{ schedule: Schedule, daySelected: numbe
     }
 }
 
-const DayButtons: React.FunctionComponent<{ daySelected: number, movieId: string }> = (props) => (
+// exported for testing
+export const DayButtons: React.FunctionComponent<{ daySelected: number, movieId: string }> = (props) => (
     <ul className='popup-days'>
         {days.map((day, i) => {
             let dayClass = i < currentDay ? 'popup-days-day past-day' : 'popup-days-day'
@@ -87,8 +89,8 @@ const DayButtons: React.FunctionComponent<{ daySelected: number, movieId: string
         })}
     </ul>
 )
-
-const PopupHeader: React.FunctionComponent<{ movie: Movie, getDefaultUrl: Function }> = (props) => (
+// exported for testing
+export const PopupHeader: React.FunctionComponent<{ movie: Movie, getDefaultUrl: Function }> = (props) => (
     <div className='popup-header'>
         <img className='movie-poster' src={`./export/posters/${props.movie.poster}`}></img>
         <div className='popup-header-right'>

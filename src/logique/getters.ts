@@ -1,8 +1,8 @@
 import { Schedule, Cinema, Movie, ClusterGroups } from '../components/types';
-export const cinemas: { [id: string]: Cinema } = require('../export/cinemas.json');
-export const schedules: { [id: string]: Schedule } = require('../export/schedules.json');
-export const movies: { [id: string]: Movie } = require('../export/movies.json');
-export const clusterGroups: ClusterGroups = require('../export/clusters.json');
+export const cinemas: { [id: string]: Cinema } = require('../../export/cinemas.json');
+export const schedules: { [id: string]: Schedule } = require('../../export/schedules.json');
+export const movies: { [id: string]: Movie } = require('../../export/movies.json');
+export const clusterGroups: ClusterGroups = require('../../export/clusters.json');
 
 //
 // Schedules

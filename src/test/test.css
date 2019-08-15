@@ -1,0 +1,34 @@
+#container-test {
+    display: flex;
+    height: 100vh;
+}
+
+#menu-test {
+    border-right: 2px solid #232857;
+    width: 20vw;
+    /* box-shadow: 15px 0px 27px -1px rgba(0,0,0,0.24); */
+
+}
+#menu-test button {
+    width: 100%;
+    padding: 1em;
+    border: unset;
+    display: flex;
+    background: unset;
+    color: white;
+}
+#menu-test button:focus{
+    outline: unset;
+}
+
+#menu-test button:hover,
+#menu-test button.selected {
+    background: #353a6a;
+}
+#content-test {
+    padding: 5em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 80vw;
+}
