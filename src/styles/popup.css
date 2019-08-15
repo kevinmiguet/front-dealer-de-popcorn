@@ -160,6 +160,7 @@
   height: 24px;
   display: flex;
   justify-content: flex-end;
+  cursor: pointer;
 }
 .version {
   font-size: 8px;

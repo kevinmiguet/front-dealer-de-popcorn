@@ -1,12 +1,10 @@
 import * as React from 'react';
-import { getSearchResult } from '../logique/search';
 import { SearchIcon } from './icons';
+import { SetStateAndUpdateHashFn } from './types';
 
-export class SearchBar extends React.Component<{ setClusters: Function, setDefaultCluster: Function }> {
+export class SearchBar extends React.Component<{ setStateAndUpdateHash: SetStateAndUpdateHashFn}> {
     search = (value: string) => {
-        value === ''
-            ? this.props.setDefaultCluster()
-            : this.props.setClusters(getSearchResult((value)))
+        this.props.setStateAndUpdateHash({searchQuery: value.trim()});
     }
     state = {
         focused: false

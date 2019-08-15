@@ -1,3 +1,5 @@
+import { AppState } from '../app';
+
 export interface Movie {
     id: string;
     title: string;
@@ -49,3 +51,5 @@ export const ClusterGroupTitles: ClusterGroupTitle[] = ['old','recent', 'retro']
 export type ClusterGroups = {
     [clusterGroup in ClusterGroupTitle]: Cluster[]
 }
+
+export type SetStateAndUpdateHashFn = (state: AppState) => any
