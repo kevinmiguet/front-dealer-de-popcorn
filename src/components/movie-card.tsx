@@ -6,7 +6,7 @@ export class MovieCard extends React.Component<{ movie: Movie }> {
   render() {
     return (
       <li className="movie-card">
-        <a href={`#/movie/${this.props.movie.id}/day/${currentDay}`}>
+        <a href={`#/movieId/${this.props.movie.id}/day/${currentDay}/showPopup/true`}>
           <img className="movie-poster"
             src={getPosterSrc(this.props.movie.poster)} 
           />

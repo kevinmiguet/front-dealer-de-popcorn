@@ -1,19 +1,19 @@
 import * as React from 'react';
 import { Movie, Schedule } from './types';
-import { getSchedulesByDistance, getCinema, getCurrentDay} from '../logique/getters';
+import { getSchedulesByDistance, getCinema, getCurrentDay, dayNumbers } from '../logique/getters';
 import { CloseIcon, DistanceIcon } from './icons';
-import { number } from 'prop-types';
+import { scrollTo } from '../logique/utils';
 
 
-const days = ['mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche', 'lundi', 'mardi'];
+const days = ['Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche', 'Lundi', 'Mardi'];
 export const currentDay = getCurrentDay();
 
-const distanceToString = (d: number) : string => {
+const distanceToString = (d: number): string => {
     if (d < 1000) return Math.round(d).toString() + ' m'
     return (d / 1000).toFixed(1) + ' km'
 }
 
-export class Popup extends React.Component<{ movie: Movie, isPopupOpened: boolean, daySelected: number, getDefaultUrl: Function }, { popupContentHeight: number, cinemasByDistance: Schedule[] }> {
+export class Popup extends React.Component<{ movie: Movie, showPopup: boolean, day: number, setStateAndUpdateHash: Function }, { popupContentHeight: number, cinemasByDistance: any[] }> {
     constructor(props) {
         super(props);
         this.state = {
@@ -22,11 +22,24 @@ export class Popup extends React.Component<{ movie: Movie, isPopupOpened: boolea
         };
         this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
     }
+    componentWillReceiveProps(newProps) {
+        if (this.props.showPopup !== newProps.showPopup) {
+            // scroll to top of popup
+            scrollTo('popup', 0, 0)
+            // scroll horizontally to current day
+            if (this.props.movie) {
+                let currentDayElement = document.getElementById(days[currentDay]);
+                scrollTo('popup-days', currentDayElement.offsetLeft, 0)
+            }
+        }
+    }
     async componentDidMount() {
         this.updateWindowDimensions();
         window.addEventListener('resize', this.updateWindowDimensions);
-        const schedule = await getSchedulesByDistance(this.props.movie.id)
-        this.setState({cinemasByDistance: schedule})
+        if (this.props.movie) {
+            const schedule = await getSchedulesByDistance(this.props.movie.id)
+            this.setState({ cinemasByDistance: schedule })
+        }
     }
 
     componentWillUnmount() {
@@ -34,47 +47,49 @@ export class Popup extends React.Component<{ movie: Movie, isPopupOpened: boolea
     }
 
     updateWindowDimensions() {
-        this.setState({ popupContentHeight: window.innerHeight - 288 });
+        this.setState({ popupContentHeight: window.innerHeight - 54 });
     }
 
     render() {
-        const popupScrollStyle = { height: this.state.popupContentHeight };
+        const popupStyle = { height: this.state.popupContentHeight };
         return (
-            <div id='popup' key={'${schedule.movieId}-${schedule.cineId}'} className={this.props.isPopupOpened ? 'popup-open' : 'popup-close'}>
-                <div className='popup-fixed'>
-                    <PopupHeader movie={this.props.movie} getDefaultUrl={this.props.getDefaultUrl} />
-                    <DayButtons daySelected={this.props.daySelected} movieId={this.props.movie.id} />
-                </div>
-                <div className='popup-scroll' style={popupScrollStyle}>
-                    {
-                        getSchedulesByDistance(this.props.movie.id) &&
-                        getSchedulesByDistance(this.props.movie.id).map(schedule => (
-                            <ScheduleComponent
-                                key={`${schedule.movieId}-${schedule.cineId}`}
-                                schedule={schedule}
-                                daySelected={this.props.daySelected}
-                            />  
-                        ))
-                    }
-                </div>
+            <div id='popup' className={this.props.showPopup ? 'popup-open' : 'popup-close'}>
+                {this.props.movie &&
+                    <div>
+                        <div className='popup-fixed'>
+                            <PopupHeader movie={this.props.movie} setStateAndUpdateHash={this.props.setStateAndUpdateHash} />
+                            <DayButtons day={this.props.day} movieId={this.props.movie.id} />
+                        </div>
+                        <div className='popup-schedules'>
+                            {getSchedulesByDistance(this.props.movie.id) && getSchedulesByDistance(this.props.movie.id).map(schedule => (
+                                <ScheduleComponent
+                                    key={`${schedule.movieId}-${schedule.cineId}`}
+                                    schedule={schedule}
+                                    day={this.props.day}
+                                />
+                            ))}
+                        </div>
+                    </div>
+                }
             </div>
-        )
+        );
     };
 }
-// exported for testing
-export const ScheduleComponent: React.FunctionComponent<{ schedule: Schedule, daySelected: number }> = (props) => {
-    const selectedDaySchedules = props.schedule.week[days[props.daySelected]]
-    const cine = getCinema(props.schedule.cineId)
+
+export const ScheduleComponent: React.FunctionComponent<{ schedule: Schedule, day: number }> = (props) => {
+    const selectedDaySchedules = props.schedule.week[days[props.day].toLowerCase()]
+    const cineId = props.schedule.cineId
+    const cinema = getCinema(cineId);
     if (selectedDaySchedules) {
         return (
             <div className='popup-element'>
                 <div className='popup-element-title-row'>
-                    <div className='popup-element-title'>{cine ? cine.name : props.schedule.cineId}</div>
-                    { 
-                        cine && cine.distance &&
+                    <div className='popup-element-title'>{cinema ? cinema.name : props.schedule.cineId}</div>
+                    {
+                        cinema && cinema.distance &&
                         <div className='popup-element-distance-row'>
-                            <DistanceIcon/>
-                            <div className='popup-element-distance'>{distanceToString(cine.distance)}</div>
+                            <DistanceIcon />
+                            <div className='popup-element-distance'>{distanceToString(cinema.distance)}</div>
                         </div>
                     }
                 </div>
@@ -85,7 +100,7 @@ export const ScheduleComponent: React.FunctionComponent<{ schedule: Schedule, da
                 {selectedDaySchedules.VO && selectedDaySchedules.VO.map(daySchedule => (
                     <div key={daySchedule} className='popup-element-bubble'>{daySchedule}</div>
                 ))}
-                 {selectedDaySchedules.VF && (
+                {selectedDaySchedules.VF && (
                     <div className='version'> VF </div>
                 )}
                 {selectedDaySchedules.VF && selectedDaySchedules.VF.map(daySchedule => (
@@ -99,27 +114,59 @@ export const ScheduleComponent: React.FunctionComponent<{ schedule: Schedule, da
 }
 
 // exported for testing
-export const DayButtons: React.FunctionComponent<{ daySelected: number, movieId: string }> = (props) => (
-    <ul className='popup-days'>
+export const DayButtons: React.FunctionComponent<{ day: number, movieId: string }> = (props) => (
+    <ul id='popup-days'>
         {days.map((day, i) => {
             let dayClass = i < currentDay ? 'popup-days-day past-day' : 'popup-days-day'
             return (
-                <a key={i} className={props.daySelected === i ? `selected ${dayClass}` : dayClass} href={`#/movie/${props.movieId}/day/${i}`}>{day}</a>
+                <a
+                    id={day}
+                    key={i}
+                    className={props.day === i ? `selected ${dayClass}` : dayClass}
+                    href={`#/movie/${props.movieId}/day/${i}/showPopup/true`}
+                >
+                    <div className='day-name'>{day}</div>
+                    <div className='day-number'>{dayNumbers[i]}</div>
+                </a>
             )
         })}
     </ul>
 )
 // exported for testing
-export const PopupHeader: React.FunctionComponent<{ movie: Movie, getDefaultUrl: Function }> = (props) => (
+export const PopupHeader: React.FunctionComponent<{ movie: Movie, setStateAndUpdateHash: Function }> = (props) => (
     <div className='popup-header'>
-        <img className='movie-poster' src={`./export/posters/${props.movie.poster}`}></img>
-        <div className='popup-header-right'>
-            <div className='popup-header-right-title'> {props.movie.title}</div>
-            <div className='popup-header-right-director'> {props.movie.directors[0]}</div>
-            <div className='popup-header-right-summary'> {props.movie.summary}</div>
+        <div className='popup-header-top'>
+            <div className='popup-header-left'>
+                <div className='popup-header-title'> {props.movie.title}</div>
+                <div className='popup-header-director'> {props.movie.directors[0]}</div>
+            </div>
+            <div className='popup-header-right'>
+                <img className='movie-poster' src={`./export/posters/${props.movie.poster}`}></img>
+            </div>
         </div>
-        <a id='icon-close' href={props.getDefaultUrl()}>
-            <CloseIcon/>
-        </a>
+        <hr />
+        <div className='popup-header-bottom'>
+            <h1>Ça raconte quoi ?</h1>
+            <div className='popup-header-summary'> {props.movie.summary}</div>
+        </div>
+
+        <div id='icon-close' onClick={() => props.setStateAndUpdateHash({ movieId: null, day: null, showPopup: null })}><CloseIcon /></div>
     </div>
 )
+export const TrailerContainer: React.FunctionComponent<{ showTrailer: boolean, trailerId: string }> = (props) => {
+    if (props.showTrailer && props.trailerId) {
+        return (
+            <div className={`trailer-container ${props.showTrailer ? 'visible' : ''}`}>
+                <iframe
+                    width="560"
+                    height="315"
+                    src={`https://www.youtube.com/embed/${props.trailerId}`}
+                    frameBorder={0}
+                    allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                >
+                </iframe >
+            </div>)
+    } return null;
+
+}

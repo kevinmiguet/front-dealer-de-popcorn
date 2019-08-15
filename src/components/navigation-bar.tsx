@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { ClusterGroupTitle } from './types';
+import { ClusterGroupTitle, SetStateAndUpdateHashFn } from './types';
 import { SearchBar } from './search-bar';
+import { FilterIcon } from './icons';
 
 interface NavigationBarProps {
     clusterSelected: ClusterGroupTitle,
-    setClusters: Function,
-    setDefaultCluster: Function
+    setStateAndUpdateHash: SetStateAndUpdateHashFn,
 }
 export class NavigationBar extends React.Component<NavigationBarProps> {
     render() {
@@ -18,7 +18,7 @@ export class NavigationBar extends React.Component<NavigationBarProps> {
                     <button className='aroundMeButton'>Around me</button>
                 </ul>
                 <div className='navigation-bar-right'>
-                    <SearchBar setClusters={this.props.setClusters} setDefaultCluster={this.props.setDefaultCluster}></SearchBar>
+                    <SearchBar setStateAndUpdateHash={this.props.setStateAndUpdateHash}></SearchBar>
                 </div>
             </nav>
         )

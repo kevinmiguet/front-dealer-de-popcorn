@@ -2,20 +2,28 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { Cluster, ClusterGroupTitle, ClusterGroupTitles } from './components/types';
 import { Content } from './components/content';
-import { Popup, currentDay } from './components/popup';
+import { Popup, currentDay, TrailerContainer } from './components/popup';
 import { NavigationBar } from './components/navigation-bar';
-import { isLegitMovieId, getClusterGroup, getMovie, movies, clusterGroups } from './logique/getters';
+import { isLegitMovieId, getClusterGroup, getMovie, clusterGroups } from './logique/getters';
+
+function getHashFromState(state: AppState): string {
+  return Object.keys(state)
+    .filter(attribute => attribute !== 'clusters' && state[attribute])
+    .map(attribute => `${attribute}/${state[attribute]}`)
+    .join('/');
+}
 
 function getStateFromHash(hash: string): AppState {
   const args = hash.split('/');
   let newState: AppState = {};
   let i = 1; // first one is always #
-  newState.isPopupOpened = false; // popup is closed by default
+  newState.showPopup = false; // popup is closed by default
+  newState.showTrailer = false; // trailer container is hidden by default
   while (i < args.length) {
     let arg = args[i];
     let argValue = args[i + 1]
 
-    if (arg === 'movie') {
+    if (arg === 'movieId') {
       let movieId = argValue;;
       // if it's not a legit Id, just don't treat this argument
       if (!isLegitMovieId(movieId)) {
@@ -23,15 +31,14 @@ function getStateFromHash(hash: string): AppState {
         continue;
       }
       newState.movieId = movieId;
-      newState.isPopupOpened = true;
       i += 2;
       continue;
     }
 
     else if (arg === 'day') {
-      let daySelected = parseInt(argValue, 10);
-      const isLegitDay = daySelected > -1 && daySelected < 7;
-      newState.daySelected = isLegitDay ? daySelected : 0;
+      let day = parseInt(argValue, 10);
+      const isLegitDay = day > -1 && day < 7;
+      newState.day = isLegitDay ? day : 0;
       i += 2;
       continue
     }
@@ -45,46 +52,43 @@ function getStateFromHash(hash: string): AppState {
       i += 2;
       continue;
     }
+    else if (arg === 'showTrailer') {
+      newState.showTrailer = argValue === 'true' ? true : false;
+    }
+    else if (arg === 'showPopup') {
+      newState.showPopup = argValue === 'true' ? true : false;
+    }
     i++;
   }
   return newState
 }
 
 export interface AppState {
-  movieId?: string,
-  isPopupOpened?: boolean
-  clusters?: Cluster[],
-  daySelected?: number;
-  clusterSelected?: ClusterGroupTitle
+  movieId?: string;
+  showPopup?: boolean;
+  showTrailer?: boolean;
+  clusters?: Cluster[];
+  day?: number;
+  clusterSelected?: ClusterGroupTitle;
+  searchQuery?: string;
 }
 
 class App extends React.Component<{}, AppState> {
   state: AppState = {
-    isPopupOpened: false,
-    movieId: Object.keys(movies)[0],
+    showPopup: false,
+    showTrailer: false,
+    movieId: null,
     clusters: clusterGroups.recent,
-    daySelected: currentDay,
-    clusterSelected: 'recent'
+    day: currentDay,
+    clusterSelected: 'recent',
   };
-  
-  // used by search bar
-  setClusters = (clusters: Cluster[]) => {
-    this.setState({
-      clusters: clusters
-    });
-  }
 
-  setBackCurrentMovieCluster = () => {
-    const clusterTitle = this.state.clusterSelected;
-    this.setState({
-      clusters: clusterGroups[clusterTitle],
-      clusterSelected: clusterTitle,
-      isPopupOpened: false,
-    })
+  setStateAndUpdateHash = (updatedState: AppState) => {
+    this.setState(
+      {...updatedState}, 
+      () => window.location.hash = getHashFromState(this.state)
+    )
   }
-
-  getDefaultUrl = (): string => `#/cluster/${this.state.clusterSelected}`
-  
 
   navigated = () => {
     const newState = getStateFromHash(window.location.hash)
@@ -101,9 +105,29 @@ class App extends React.Component<{}, AppState> {
   render() {
     return (
       <div>
-        <Popup movie={getMovie(this.state.movieId)} isPopupOpened={this.state.isPopupOpened} daySelected={this.state.daySelected} getDefaultUrl={this.getDefaultUrl} />
-        <Content clusters={this.state.clusters} isPopupOpened={this.state.isPopupOpened} getDefaultUrl={this.getDefaultUrl} />
-        <NavigationBar clusterSelected={this.state.clusterSelected} setClusters={this.setClusters} setDefaultCluster={this.setBackCurrentMovieCluster} />
+        <Popup 
+          movie={getMovie(this.state.movieId)} 
+          showPopup={this.state.showPopup} 
+          day={this.state.day} 
+          setStateAndUpdateHash={this.setStateAndUpdateHash} 
+        />
+
+        <Content 
+          clusters={this.state.clusters}
+          showPopup={this.state.showPopup}
+          showTrailer={this.state.showTrailer}
+          setStateAndUpdateHash={this.setStateAndUpdateHash} 
+        />
+        
+        <NavigationBar 
+          clusterSelected={this.state.clusterSelected}
+          setStateAndUpdateHash={this.setStateAndUpdateHash}
+        />
+        
+        <TrailerContainer 
+          showTrailer={this.state.showTrailer} 
+          trailerId={this.state.movieId && getMovie(this.state.movieId).trailerId}
+        />
       </div>
     );
   }

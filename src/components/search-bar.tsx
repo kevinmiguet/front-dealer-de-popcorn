@@ -1,12 +1,10 @@
 import * as React from 'react';
-import { getSearchResult } from '../logique/search';
 import { SearchIcon } from './icons';
+import { SetStateAndUpdateHashFn } from './types';
 
-export class SearchBar extends React.Component<{ setClusters: Function, setDefaultCluster: Function }> {
+export class SearchBar extends React.Component<{ setStateAndUpdateHash: SetStateAndUpdateHashFn}> {
     search = (value: string) => {
-        value === ''
-            ? this.props.setDefaultCluster()
-            : this.props.setClusters(getSearchResult((value)))
+        this.props.setStateAndUpdateHash({searchQuery: value.trim()});
     }
     state = {
         focused: false
@@ -14,6 +12,7 @@ export class SearchBar extends React.Component<{ setClusters: Function, setDefau
 
     onFocus = () => this.setState({focused: true})
     onBlur = () => this.setState({focused: false})
+    
     focus = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         event.preventDefault(); // so that we don't blur
         const searchInput = document.getElementById('search-bar-input');

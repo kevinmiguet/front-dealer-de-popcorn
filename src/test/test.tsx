@@ -40,10 +40,10 @@ class Test extends React.Component<{}, TestState> {
         </nav>
         <div id='content-test'>
           {this.state.component === 'MovieCard' && <MovieCard movie={movie}></MovieCard>}
-          {this.state.component === 'SearchBar' && <SearchBar setClusters={null} setDefaultCluster={null}></SearchBar>}
-          {this.state.component === 'DayButtons' && <DayButtons daySelected={0} movieId={"270719"}></DayButtons>}
-          {this.state.component === 'Schedules' && <ScheduleComponent schedule={schedule} daySelected={4}></ScheduleComponent>}
-          {this.state.component === 'PopupHeader' && <PopupHeader movie={movie} getDefaultUrl={() => ''}></PopupHeader>}
+          {this.state.component === 'SearchBar' && <SearchBar setStateAndUpdateHash={null}></SearchBar>}
+          {this.state.component === 'DayButtons' && <DayButtons day={0} movieId={"270719"}></DayButtons>}
+          {this.state.component === 'Schedules' && <ScheduleComponent schedule={schedule} day={4}></ScheduleComponent>}
+          {this.state.component === 'PopupHeader' && <PopupHeader movie={movie} setStateAndUpdateHash={() => ''}></PopupHeader>}
         </div>
       </div>
     );
