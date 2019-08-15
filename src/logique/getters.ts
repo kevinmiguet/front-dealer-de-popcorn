@@ -32,31 +32,25 @@ const indexedScheduleIds: IndexedScheduleIds = scheduleIds.reduce((_indexedSched
 //
 // Add distance from current position to each cinema
 
-export interface FrontendCinema extends Cinema{
-    distance: number
+export interface FrontendCinema extends Cinema {
+    distance?: number
 }
 interface IndexedFrontendCinemas {
     [id: string]: FrontendCinema
 }
 
-const cinemaIds = Object.keys(rawCinemas)
-let indexedFrontendCinemas: IndexedFrontendCinemas = null
+let indexedFrontendCinemas: IndexedFrontendCinemas = rawCinemas
 function initIndexedCineWithDistanceDictionary() {
-    indexedFrontendCinemas = {}
-    cinemaIds.map((cineId: string) => {
-        const cine = rawCinemas[cineId]
-        indexedFrontendCinemas[cineId] = {} as FrontendCinema
-        Object.assign(indexedFrontendCinemas[cineId], cine)
-    })
-    watchCurrentPosition((position) => {
-        cinemaIds.map((cineId: string) => {
+    const cinemaIds = Object.keys(indexedFrontendCinemas)
+    watchCurrentPosition(currentPosition => {
+        cinemaIds.forEach(cineId => {
             const cine = rawCinemas[cineId]
             if (!cine.pos) return;
             try {
                 const d = evaluateDistance(cine.pos.lat, 
                     cine.pos.lng, 
-                    position.coords.latitude,
-                    position.coords.longitude)
+                    currentPosition.coords.latitude,
+                    currentPosition.coords.longitude)
                 indexedFrontendCinemas[cineId].distance = d
             } catch (err) {
                 console.error('error while updating distance: ', err)
@@ -73,13 +67,13 @@ export function getSchedules(id: string): Schedule[] {
 
 // takes a cinema or movie Id and returns their schedules
 export function getSchedulesByDistance(id: string): Schedule[] {
-    const s = indexedScheduleIds[id].map(scId => schedules[scId]).sort((s1, s2) => {
+    return getSchedules(id)
+    .sort((s1, s2) => {
         const cine1 = indexedFrontendCinemas[s1.cineId]
         const cine2 = indexedFrontendCinemas[s2.cineId]
         if (!cine1 || !cine2) return 0
         return cine1.distance - cine2.distance
-    })
-    return s
+    });
 }
 
 //
@@ -88,7 +82,7 @@ export function getSchedulesByDistance(id: string): Schedule[] {
 
 export function getCinema(id: string) {
     const cine = indexedFrontendCinemas[id]
-    return cine
+    return cine;
 }
 
 //
