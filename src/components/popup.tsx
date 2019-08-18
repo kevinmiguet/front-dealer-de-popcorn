@@ -16,7 +16,7 @@ const distanceToString = (d: number): string => {
 }
 
 export const Popup: React.FunctionComponent<{}> = ((props) => {
-    const store = useStore()
+    const store = useStore();
     const prevShow = usePrevious(store.state.showPopup) || null;
 
     React.useEffect(() => {
