@@ -1,9 +1,17 @@
 import * as React from 'react'
-import { AppState } from '../app';
 import { isLegitMovieId, clusterGroups, getMovie } from '../logique/getters';
 import { ClusterGroupTitles } from './types';
 import { useLocalStore } from 'mobx-react-lite';
 import { getSearchQueryClusters } from '../logique/search';
+
+interface AppState {
+  movieId?: string;
+  showPopup?: boolean;
+  showTrailer?: boolean;
+  day?: number;
+  cluster?: ClusterGroupTitle;
+  searchQuery?: string;
+}
 
 export function getHashFromState(state: AppState): string {
     const hash = Object.keys(state)

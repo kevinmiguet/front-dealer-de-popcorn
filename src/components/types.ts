@@ -1,5 +1,3 @@
-import { AppState } from '../app';
-
 export interface Movie {
     id: string;
     title: string;
