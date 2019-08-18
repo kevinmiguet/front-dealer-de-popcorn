@@ -4,13 +4,13 @@ import { MovieCard } from './movie-card';
 import { getMovie } from '../logique/getters';
 import { scrollTop } from '../logique/utils';
 import { useObserver } from 'mobx-react-lite';
-import { usePrevious } from '../app';
+import { useStore, usePrevious } from './store';
 
-export const Content: React.FunctionComponent<{ store: any }> = (props) => {
-    let { store } = props;
-
+export const Content: React.FunctionComponent<{}> = (props) => {
+    const store = useStore()
     const prevClusters = usePrevious(store.clusters) || null;
-
+    
+    // scroll top when changing clusters
     React.useEffect(() => {
         if (prevClusters &&
             (prevClusters.length !== store.clusters.length || prevClusters[0].title !== store.clusters[0].title)

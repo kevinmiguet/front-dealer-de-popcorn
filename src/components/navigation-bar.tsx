@@ -1,9 +1,10 @@
 import * as React from 'react';
 import { SearchBar } from './search-bar';
 import { useObserver } from 'mobx-react-lite';
+import { useStore } from './store';
 
-export const NavigationBar: React.FunctionComponent<{ store: any }> = (props) => {
-    let {store} = props;
+export const NavigationBar: React.FunctionComponent<{}> = (props) => {
+    const store = useStore();
     return useObserver(() => (
         <nav className='navigation-bar'>
             <ul className='navigation-buttons'>
@@ -13,7 +14,7 @@ export const NavigationBar: React.FunctionComponent<{ store: any }> = (props) =>
                 <button className='aroundMeButton'>Around me</button>
             </ul>
             <div className='navigation-bar-right'>
-                <SearchBar store={props.store}/>
+                <SearchBar/>
             </div>
         </nav>
     ));

@@ -1,13 +1,14 @@
 import * as React from 'react';
 import { SearchIcon } from './icons';
 import { useObserver } from 'mobx-react-lite';
+import { useStore } from './store';
 
-export const SearchBar: React.FunctionComponent<{store: any}> = (props) => {
+export const SearchBar: React.FunctionComponent<{}> = (props) => {
     const [focused, setFocused] = React.useState(false);
-    let {store} = props;
+    let store = useStore();
+
     const search = (_value: string) => {
         const searchQuery = _value.trim()
-        console.log(searchQuery);
         store.setStateAndUpdateHash({ searchQuery })
     }
 
@@ -23,7 +24,7 @@ export const SearchBar: React.FunctionComponent<{store: any}> = (props) => {
     }
     let getClassName = () => `search-bar-element ${focused ? 'focused' : ''}`
 
-    return (
+    return useObserver(() => (
         <div onMouseDown={(event) => focus(event)} id='search-bar-container' className={getClassName()}>
             <SearchIcon />
             <input
@@ -36,5 +37,5 @@ export const SearchBar: React.FunctionComponent<{store: any}> = (props) => {
                 onBlur={() => onBlur()}
             ></input>
         </div>
-    );
+    ));
 }

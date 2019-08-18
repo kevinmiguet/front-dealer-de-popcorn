@@ -1,9 +1,9 @@
-import { createContext } from 'react'
-import { decorate, observable, action } from 'mobx'
+import * as React from 'react'
 import { AppState } from '../app';
-import { isLegitMovieId } from '../logique/getters';
+import { isLegitMovieId, clusterGroups, getMovie } from '../logique/getters';
 import { ClusterGroupTitles } from './types';
 import { useLocalStore } from 'mobx-react-lite';
+import { getSearchQueryClusters } from '../logique/search';
 
 export function getHashFromState(state: AppState): string {
     const hash = Object.keys(state)
@@ -76,3 +76,61 @@ export function getStateFromHash(hash: string): AppState {
     }
     return newState
 }
+export function usePrevious(value) {
+  const ref = React.useRef();
+  React.useEffect(() => {
+    ref.current = value;
+  });
+  return ref.current;
+}
+
+const createStore = () => {
+  return {
+    state: {
+      showPopup: false,
+      showTrailer: false,
+      movieId: null,
+      day: 0,
+      cluster: 'recent',
+    } as AppState,
+  
+    setStateAndUpdateHash(updatedState: AppState) {
+      this.state = { ...this.state, ...updatedState };
+      window.location.hash = getHashFromState(this.state)
+    },
+    navigated() {
+      const newState = getStateFromHash(window.location.hash);
+      this.state = {...this.state, ...newState};
+    },
+    get clusters(){
+      return this.state.searchQuery ? 
+        getSearchQueryClusters(this.state.searchQuery) :
+        clusterGroups[this.state.cluster] 
+    },
+    get movie() {
+      return this.state.movieId && getMovie(this.state.movieId)
+    }
+  
+  }
+};
+type Store = ReturnType<typeof createStore>;
+const StoreContext = React.createContext<Store | null>(null);
+
+export const StoreProvider = (props: { children?: React.ReactNode }) => {
+  let store = useLocalStore(createStore);
+  store.navigated();
+  window.addEventListener('hashchange', store.navigated, false);
+  return (
+    <StoreContext.Provider value={store}>
+      {props.children}
+    </StoreContext.Provider>
+  );
+};
+
+export const useStore = () => {
+  const store = React.useContext(StoreContext);
+  if (!store) {
+    throw new Error("useStore: !store, did you forget StoreProvider?");
+  }
+  return store;
+};

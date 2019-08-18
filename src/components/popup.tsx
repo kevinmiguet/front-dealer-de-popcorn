@@ -4,7 +4,7 @@ import { getSchedulesByDistance, getCinema, getCurrentDay, dayNumbers, getMovie 
 import { CloseIcon, DistanceIcon } from './icons';
 import { scrollTo } from '../logique/utils';
 import { useObserver } from 'mobx-react-lite';
-import { usePrevious } from '../app';
+import { useStore, usePrevious } from './store';
 
 
 const days = ['Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche', 'Lundi', 'Mardi'];
@@ -15,12 +15,12 @@ const distanceToString = (d: number): string => {
     return (d / 1000).toFixed(1) + ' km'
 }
 
-export const Popup: React.FunctionComponent<{ store: any }> = ((props) => {
-    let { store } = props;
-    const prevShow = usePrevious(store.state) || null;
-    
+export const Popup: React.FunctionComponent<{}> = ((props) => {
+    const store = useStore()
+    const prevShow = usePrevious(store.state.showPopup) || null;
+
     React.useEffect(() => {
-        if (prevShow && store.state.showPopup !== prevShow.showPopup) {
+        if (store.state.showPopup !== prevShow) {
             scrollTo('popup', 0, 0)
             // scroll horizontally to current day
             if (store.state.movieId) {
@@ -35,8 +35,8 @@ export const Popup: React.FunctionComponent<{ store: any }> = ((props) => {
             {store.state.movieId &&
                 <div>
                     <div className='popup-fixed'>
-                        <PopupHeader store={store} />
-                        <DayButtons day={store.state.day} movieId={store.state.movieId} />
+                        <PopupHeader />
+                        <DayButtons />
                     </div>
                     <div className='popup-schedules'>
                         {getSchedulesByDistance(store.state.movieId) && getSchedulesByDistance(store.state.movieId).map(schedule => (
@@ -91,27 +91,30 @@ export const ScheduleComponent: React.FunctionComponent<{ schedule: Schedule, da
 }
 
 // exported for testing
-export const DayButtons: React.FunctionComponent<{ day: number, movieId: string }> = (props) => useObserver(() => (
-    <ul id='popup-days'>
-        {days.map((day, i) => {
-            let dayClass = i < currentDay ? 'popup-days-day past-day' : 'popup-days-day'
-            return (
-                <a
-                    id={day}
-                    key={i}
-                    className={props.day === i ? `selected ${dayClass}` : dayClass}
-                    href={`#/movie/${props.movieId}/day/${i}/showPopup/true`}
-                >
-                    <div className='day-name'>{day}</div>
-                    <div className='day-number'>{dayNumbers[i]}</div>
-                </a>
-            )
-        })}
-    </ul>
-));
+export const DayButtons: React.FunctionComponent<{}> = (props) => {
+    const store = useStore()
+    return useObserver(() => (
+        <ul id='popup-days'>
+            {days.map((day, i) => {
+                let dayClass = i < currentDay ? 'popup-days-day past-day' : 'popup-days-day'
+                return (
+                    <a
+                        id={day}
+                        key={i}
+                        className={store.state.day === i ? `selected ${dayClass}` : dayClass}
+                        href={`#/movie/${store.state.movieId}/day/${i}/showPopup/true`}
+                    >
+                        <div className='day-name'>{day}</div>
+                        <div className='day-number'>{dayNumbers[i]}</div>
+                    </a>
+                )
+            })}
+        </ul>
+    ))
+};
 // exported for testing
-export const PopupHeader: React.FunctionComponent<{ store: any }> = (props) => {
-    const { store } = props;
+export const PopupHeader: React.FunctionComponent<{}> = (props) => {
+    const store = useStore()
 
     return useObserver(() => (
         <div className='popup-header'>
@@ -138,8 +141,8 @@ export const PopupHeader: React.FunctionComponent<{ store: any }> = (props) => {
         </div>
     ))
 };
-export const TrailerContainer: React.FunctionComponent<{ store: any }> = (props) => {
-    const { store } = props;
+export const TrailerContainer: React.FunctionComponent<{}> = (props) => {
+    const store = useStore()
     return useObserver(() => (
         <div className={`trailer-container ${store.state.showTrailer && store.movie.trailerId ? 'visible' : ''}`}>
             {store.state.showTrailer && store.movie.trailerId && <iframe
