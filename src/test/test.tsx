@@ -5,6 +5,8 @@ import { Movie, Schedule } from '../components/types';
 import { SearchBar } from '../components/search-bar';
 import { DayButtons, ScheduleComponent, PopupHeader } from '../components/popup';
 import { FilterButton, FilterOption, FilterDropdown } from '../components/filters';
+import { useObserver } from 'mobx-react-lite';
+import { StoreProvider, useStore } from '../components/store';
 const movie: Movie = {
   "id": '270719',
   "title": "Joel, une enfance en Patagonie",
@@ -12,17 +14,21 @@ const movie: Movie = {
   "year": 2018,
   "actors": ["Victoria Almeida", "Diego Gentile", "Joel Noguera", "Ana Katz", "Gustavo Daniele"], "genres": ["Drame"], "poster": "270719.jpg", "releaseDate": "Wed Jul 10 2019", "countries": ["argentin"], "summary": "Ne pouvant pas avoir d’enfant, Cecilia et Diego, qui viennent d’emménager dans une petite ville de la Terre de Feu, attendent depuis longtemps de pouvoir adopter. Alors qu'ils n'y croyaient plus, l'arrivée soudaine de Joel, un garçon de 9 ans au passé tourmenté, va bouleverser leur vie et l'équilibre de toute la petite communauté provinciale."
 };
-const schedule: Schedule = {"cineId":"P7517","movieId":"273484","week":{"dimanche":{"VF":["11:00","16:15"],"VO":["18:45"]},"lundi":{"VF":["11:00","16:15"],"VO":["18:45"]},"mardi":{"VF":["11:00","16:15"],"VO":["18:45"]}}}
+const schedule: Schedule = { "cineId": "P7517", "movieId": "273484", "week": { "dimanche": { "VF": ["11:00", "16:15"], "VO": ["18:45"] }, "lundi": { "VF": ["11:00", "16:15"], "VO": ["18:45"] }, "mardi": { "VF": ["11:00", "16:15"], "VO": ["18:45"] } } }
 
-interface TestState {
-  component: string,
+
+
+const TestWrapper: React.FunctionComponent<{}> = () => {
+  return useObserver(() => (
+    <StoreProvider>
+      <Test />
+    </StoreProvider>
+  ));
 }
 
-class Test extends React.Component<{}, TestState> {
-  state: TestState = {
-    component: 'FilterDropdown',
-  }
-  components: string[] = [
+const Test: React.FunctionComponent<{}> = () => {
+  let [currentComponent, setComponent] = React.useState('FilterDropdown');
+  const components: string[] = [
     'MovieCard',
     'SearchBar',
     'DayButtons',
@@ -32,40 +38,39 @@ class Test extends React.Component<{}, TestState> {
     'FilterOption',
     'FilterDropdown',
   ]
-  setComponent = (component: string) => {
-    this.setState({component});
-  };
+  
+  let store = useStore();
+  store.state.movieId = movie.id
 
-  render() {
-    return (
-      <div id='container-test'>
-        <nav id='menu-test'>
-          {this.components
-            .map(component => 
-            <button 
-                className={this.state.component === component ? 'selected' : ''}
-                onClick={() => this.setComponent(component)}
+  return useObserver(() => (
+    <div id='container-test'>
+      <nav id='menu-test'>
+        {components
+          .map(component =>
+            <button
+              className={currentComponent === component ? 'selected' : ''}
+              onClick={() => setComponent(component)}
             >
-            {component} 
+              {component}
             </button>
           )}
-        </nav>
-        <div id='content-test'>
-          {this.state.component === 'MovieCard' && <MovieCard movie={movie}></MovieCard>}
-          {this.state.component === 'SearchBar' && <SearchBar setStateAndUpdateHash={null}></SearchBar>}
-          {this.state.component === 'DayButtons' && <DayButtons day={0} movieId={"270719"}></DayButtons>}
-          {this.state.component === 'Schedules' && <ScheduleComponent schedule={schedule} day={4}></ScheduleComponent>}
-          {this.state.component === 'PopupHeader' && <PopupHeader movie={movie} setStateAndUpdateHash={() => ''}></PopupHeader>}
-          {this.state.component === 'FilterButton' && <FilterButton></FilterButton>}
-          {this.state.component === 'FilterOption' && <FilterOption value='Comédie' ></FilterOption>}
-          {this.state.component === 'FilterDropdown' && <FilterDropdown title='Genre' values={['Comédie', 'Drame', 'Action', 'Thriller', 'Animation', 'Documentaire']}></FilterDropdown>}
-        </div>
+      </nav>
+      <div id='content-test'>
+        {currentComponent === 'MovieCard' && <MovieCard movie={movie}></MovieCard>}
+        {currentComponent === 'SearchBar' && <SearchBar></SearchBar>}
+        {currentComponent === 'DayButtons' && <DayButtons></DayButtons>}
+        {currentComponent === 'Schedules' && <ScheduleComponent schedule={schedule} day={4}></ScheduleComponent>}
+        {currentComponent === 'PopupHeader' && <PopupHeader></PopupHeader>}
+        {currentComponent === 'FilterButton' && <FilterButton></FilterButton>}
+        {currentComponent === 'FilterOption' && <FilterOption value='Comédie' ></FilterOption>}
+        {currentComponent === 'FilterDropdown' && <FilterDropdown title='Genre' values={['Comédie', 'Drame', 'Action', 'Thriller', 'Animation', 'Documentaire']}></FilterDropdown>}
       </div>
-    );
-  }
+    </div>
+  ));
 }
 
+
 ReactDOM.render(
-  <Test/>,
+  <TestWrapper />,
   document.getElementById('test')
 );
