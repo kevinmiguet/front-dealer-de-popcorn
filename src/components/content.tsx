@@ -34,7 +34,7 @@ export const Content: React.FunctionComponent<{}> = (props) => {
 
 const ClusterElement: React.FunctionComponent<{ cluster: Cluster }> = ({ cluster }) => useObserver(() => (
     <div className='cluster' id={cluster.id}>
-        {cluster.title !== '' ? <div className='cluster-title'>{cluster.title}</div> : ''}
+        {cluster.title !== '' && <div className='cluster-title'>{cluster.title}</div>}
         <div className='cluster-content'>
             {cluster.movieIds.map(movieId => (
                 <MovieCard key={movieId} movie={getMovie(movieId)}></MovieCard>
